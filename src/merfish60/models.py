@@ -52,7 +52,7 @@ def transform_onehot(encoder: OneHotEncoder, meta) -> np.ndarray:
 
 
 def align_predict_proba(
-    model: LogisticRegression,
+    model,
     X: np.ndarray,
     global_classes: Sequence[str],
 ) -> np.ndarray:

@@ -11,7 +11,8 @@ from merfish60.io import repo_root
 
 
 REGISTRY_REL = "experiments/registry.csv"
-BASELINE_RUN_IDS = ("YW-000", "YW-001")
+FROZEN_RUN_IDS = ("YW-000", "YW-001", "YW-002", "YW-003", "YW-004")
+BASELINE_RUN_IDS = FROZEN_RUN_IDS
 
 REGISTRY_COLUMNS = [
     "run_id",
@@ -65,14 +66,14 @@ def append_registry_row(
     df = load_registry(root)
     run_id = str(row["run_id"])
     exists = bool(len(df) and (df["run_id"] == run_id).any())
+    if exists and run_id in FROZEN_RUN_IDS:
+        raise RegistryError("refusing to alter frozen run {}".format(run_id))
     if exists and not overwrite:
         raise RegistryError(
             "run_id {} already exists; pass --overwrite to replace that row only".format(
                 run_id
             )
         )
-    if exists and run_id in BASELINE_RUN_IDS and not overwrite:
-        raise RegistryError("refusing to alter baseline run {}".format(run_id))
     if exists:
         df = df.loc[df["run_id"] != run_id].copy()
     incoming = {col: "" for col in REGISTRY_COLUMNS}

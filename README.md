@@ -1,25 +1,73 @@
-# WYH Modeling Track
+# WYH — MODEL V1: Hierarchical Signature Specialists
 
-Modeling track for the University of Rochester Biomedical Data Science Hackathon Summer 2026 (60-class MERFISH cell-type classification).
+MODEL V1 is the first frozen release of the WYH modeling pipeline for the 60-class MERFISH cell-type classification task.
 
-| | |
+## Validation result
+
+Frozen 3-fold protocol: `StratifiedKFold(n_splits=3, shuffle=True, random_state=20260819)`.
+
+| Model | Method | 3-fold OOF accuracy | Macro-F1 |
+|---|---|---:|---:|
+| YW-001 | Gene-only Logistic Regression | 55.00% | 0.3894 |
+| YW-002 | Gene + Metadata | 75.68% | 0.6799 |
+| YW-003 | Candidate Masking | 75.30% | 0.7130 |
+| **MODEL V1 / YW-004** | **Hierarchical Signature Specialists** | **75.98%** | **0.7053** |
+
+MODEL V1 correctly classifies 3,799 / 5,000 cells under the frozen 3-fold OOF protocol. These are local out-of-fold validation results, not an official leaderboard score. MODEL V1 was not submitted for official scoring.
+
+## MODEL V1 method
+
+MODEL V1 uses `(Region, E/I, Segment)` metadata signatures to route cells between deterministic and learned specialists.
+
+- Single-class signatures use deterministic routing.
+- Ambiguous signatures use per-signature multinomial L2 logistic-regression specialists.
+- Specialists use the 200 log1p-transformed gene-count features.
+- Unseen or failed signatures use a global gene-only logistic-regression fallback.
+- Signature construction and routing are fold-safe during OOF evaluation.
+
+Full-train routing: **28** signatures (**15** deterministic, **13** ambiguous specialists, **0** failed specialists). Test routing: **797** deterministic, **4,203** specialist, **0** fallback.
+
+## Why MODEL V1 was selected
+
+Gene-only logistic regression established a 55.00% OOF baseline. Adding anatomical metadata increased OOF accuracy to 75.68%. Candidate masking reached 75.30%. Per-signature specialists achieved the strongest validated checkpoint at 75.98%.
+
+Sprint 3 did not replace that architecture: exploratory ensemble diagnostics were not nested and did not beat YW-004; nested hard-bucket specialist search retained the original log1p logistic regression in every outer fold; the hybrid replacement changed no predictions. MODEL V1 therefore freezes YW-004.
+
+## Error analysis
+
+Remaining errors concentrate in the large metadata-missing / glial-non-neuronal regime. That fully missing `(Region, E/I, Segment)` bucket contains 2,958 / 5,000 cells, with YW-004 OOF accuracy 68.15%. Of 1,201 remaining OOF errors, 942 fall in that bucket.
+
+Major residual confusion families:
+
+- `oligodendrocyte_1` ↔ `oligodendrocyte_progenitor_2`
+- `oligodendrocyte_2` ↔ `oligodendrocyte_progenitor_2`
+- `astrocyte_2` → `astrocyte_1`
+
+This error concentration motivates the spatial and reference-augmented MODEL V2 track.
+
+## Reproduction
+
+```bash
+.venv/bin/python scripts/06_model_v1.py --overwrite
+.venv/bin/pytest -q tests/
+.venv/bin/python scripts/90_validate_submission.py outputs/submissions/model_v1.csv
+.venv/bin/python scripts/10_official_manifest.py --verify
+```
+
+The candidate is `outputs/submissions/model_v1.csv`. Do not overwrite frozen MODEL V1 artifacts unless `--overwrite` is intended.
+
+## Documentation and release artifacts
+
+Full write-up: [docs/versions/model_v1.md](docs/versions/model_v1.md).
+
+| Artifact | Path |
 |---|---|
-| **Current released version** | **MODEL V1** |
-| Architecture | YW-004 hierarchical `(Region, E-I, Segment)` specialists |
-| 3-fold OOF | **75.98%** (0.7598; 3799 / 5000) |
-| Official hidden-test score | **Not submitted** |
-| Official leaderboard score | **Not submitted** |
 | Release tag | `model-v1` |
-| Full write-up | [docs/versions/model_v1.md](docs/versions/model_v1.md) |
 | Submission candidate | `outputs/submissions/model_v1.csv` |
+| Test probabilities | `outputs/probabilities/model_v1_test_probabilities.csv.gz` |
+| Run metrics | `outputs/metrics/model_v1_metrics.json` |
 
-MODEL V1 is a submission-ready candidate. It has not been selected or pushed to the captain repository as an official team submission.
-
-| Version | Status | OOF | Official score |
-|---|---|---|---|
-| MODEL V1 | Frozen | 0.7598 | Not submitted |
-
-MODEL V1 must not be modified. Later spatial / reference work is a separate MODEL V2 track and is not part of this release.
+MODEL V1 is a frozen submission-ready candidate. It has not been selected or pushed to the captain repository as an official team submission.
 
 ---
 

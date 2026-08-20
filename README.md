@@ -1,3 +1,30 @@
+# WYH Modeling Track
+
+Personal modeling workspace on branch `ywan/ml-pipeline` for the University of Rochester Biomedical Data Science Hackathon Summer 2026 (60-class MERFISH cell-type classification).
+
+| | |
+|---|---|
+| **Current released version** | **MODEL V1** |
+| Architecture | YW-004 hierarchical `(Region, E-I, Segment)` specialists |
+| Personal 3-fold OOF | **75.98%** (0.7598; 3799 / 5000) |
+| Official hidden-test score | **Not submitted** |
+| Official leaderboard score | **Not submitted** |
+| Frozen local tag | `model-v1` |
+| Full write-up | [docs/versions/model_v1.md](docs/versions/model_v1.md) |
+| Personal candidate | `outputs/submissions/model_v1.csv` |
+
+This is a personal, submission-ready candidate. It has not been pushed to the captain repository as an official team submission.
+
+| Version | Status | Personal OOF | Official score |
+|---|---|---|---|
+| MODEL V1 | Frozen | 0.7598 | Not submitted |
+
+MODEL V1 must not be modified. Later spatial / reference work is a separate MODEL V2 track and is not part of this release.
+
+---
+
+# Original Hackathon Information
+
 # University of Rochester Biomedical Data Science Hackathon Summer 2026
 Welcome to the landing page for the hackathon. The hackathon will commence 8/18. It will be a prediction challenge. All predictions should be submitted through GitHub using the captain's handle. Scoring will also happen in GitHub. All details regarding the hackathon will be posted here.  
 

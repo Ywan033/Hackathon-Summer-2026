@@ -1,20 +1,20 @@
 # MODEL V1 — Hierarchical Signature Specialists
 
-Personal modeling track on branch `ywan/ml-pipeline`. This document describes the frozen MODEL V1 release. It is not an official captain-repository submission.
+This document describes the frozen MODEL V1 release. It is not an official captain-repository submission.
 
 ## 1. Status
 
 | Item | Value |
 |---|---|
-| Identity | Personal MODEL V1 candidate |
+| Identity | MODEL V1 candidate |
 | Architecture | Frozen YW-004 full-train per-signature specialists |
-| Selection metric | Personal 3-fold out-of-fold (OOF) overall accuracy |
+| Selection metric | 3-fold out-of-fold (OOF) overall accuracy |
 | Primary OOF accuracy | **0.7598** (3799 / 5000) |
 | Official hidden-test score | **Not submitted** |
 | Official leaderboard score | **Not submitted** |
-| Candidate file | `outputs/submissions/model_v1.csv` (5000 rows; official contract) |
+| Submission candidate | `outputs/submissions/model_v1.csv` (5000 rows; official contract) |
 
-MODEL V1 is **frozen**. The selected architecture is YW-004 hierarchical specialists. The recorded OOF accuracy is a local validation number on persisted personal 3-fold assignments. MODEL V1 was not submitted for official scoring, so no official hidden-test or leaderboard score is available.
+MODEL V1 is **frozen**. The selected architecture is YW-004 hierarchical specialists. The recorded OOF accuracy is a local validation number on persisted 3-fold assignments. MODEL V1 was not submitted for official scoring, so no official hidden-test or leaderboard score is available.
 
 The candidate has exactly 5000 test predictions in `meta_test.csv` order, uses the official columns `Cell_ID,MERFISH_cell_type_annotation.y`, and is checked by the in-repo submission validator.
 
@@ -38,7 +38,7 @@ The official train/test split is a within-section mixed split. Cells are **not**
 
 ## 3. Validation Protocol
 
-All MODEL V1 selection numbers use the frozen personal protocol:
+All MODEL V1 selection numbers use the frozen 3-fold protocol:
 
 ```text
 StratifiedKFold(
@@ -111,7 +111,7 @@ OOF routing under the 3-fold protocol (`outputs/metrics/YW-004_metrics.json`): d
 
 ## 6. Why YW-004 Was Selected
 
-YW-004 was selected because it had the highest **eligible** personal 3-fold OOF accuracy among leakage-safe experiments: **0.7598**.
+YW-004 was selected because it had the highest **eligible** 3-fold OOF accuracy among leakage-safe experiments: **0.7598**.
 
 Relative to the gene-only baseline YW-001 (0.5500):
 
@@ -167,24 +167,24 @@ The residual problem is overlapping glial subtypes when Region / E-I / Segment a
 - Train and test Cell_IDs are disjoint (data contract).
 - Official CSVs are hashed in `experiments/official_data_manifest.json` and verified before V1 training (`scripts/10_official_manifest.py --verify`).
 - During OOF, signature → candidate maps are built from the training fold only. Full-train MODEL V1 maps use the 5000 labeled training cells only.
-- Candidate CSV must match official test Cell_ID order and the 60 allowed labels (`merfish60.validate_submission`).
+- Submission candidate CSV must match official test Cell_ID order and the 60 allowed labels (`merfish60.validate_submission`).
 - `tests/test_model_v1.py` checks: all 5000 train IDs used; no test IDs in fitting; gene-only specialists; hyperparameters match YW-004; 5000-row submission; label set; probability row sums; `prediction/prediction.csv` unmodified; metrics record OOF selection and do **not** record test/leaderboard accuracy.
 
 These tests are part of the frozen V1 implementation. This document does not invent a historical pytest pass count beyond what the repository records.
 
 ## 9. Submission Artifact
 
-Personal, submission-ready candidate (not an official leaderboard file):
+Submission-ready MODEL V1 candidate (not an official leaderboard file):
 
 | Artifact | Path |
 |---|---|
-| Candidate predictions | `outputs/submissions/model_v1.csv` |
+| Submission candidate | `outputs/submissions/model_v1.csv` |
 | Test probabilities (60-class order from `allowed_labels()`) | `outputs/probabilities/model_v1_test_probabilities.csv.gz` |
 | Run metrics | `outputs/metrics/model_v1_metrics.json` |
 | Class order | `outputs/metrics/model_v1_class_order.json` |
 | Signature routing table | `outputs/metrics/model_v1_signature_summary.csv` |
 
-Do not copy this file to `prediction/prediction.csv` as part of MODEL V1. Official team submission is a separate captain-repository action and was not performed for this personal candidate.
+Do not copy this file to `prediction/prediction.csv` as part of MODEL V1. Official team submission is a separate captain-repository action and was not performed for this MODEL V1 candidate.
 
 ## 10. Reproduction
 
@@ -219,7 +219,7 @@ Expected selection number after a faithful OOF rerun: **0.7598**. MODEL V1 was n
 | `src/merfish60/signatures.py` | Signature keys, candidate maps, mask-and-renormalize |
 | `src/merfish60/models.py` | Shared `LR_KWARGS` and `log1p` helpers |
 | `src/merfish60/validate_submission.py` | Official CSV contract |
-| `scripts/06_model_v1.py` | Train / predict / write personal candidate |
+| `scripts/06_model_v1.py` | Train / predict / write submission candidate |
 | `scripts/02_sprint2_experiments.py` | YW-002/003/004 OOF |
 | `scripts/01_baseline.py` | YW-000/001 OOF |
 | `scripts/04_sprint3_experiments.py` | YW-005/006/007 (not selected) |
@@ -232,14 +232,14 @@ Expected selection number after a faithful OOF rerun: **0.7598**. MODEL V1 was n
 | `outputs/metrics/` | Per-run JSON, including `model_v1_metrics.json` |
 | `outputs/oof/` | OOF prediction tables |
 | `outputs/probabilities/` | OOF and test probability matrices |
-| `outputs/submissions/model_v1.csv` | Personal candidate |
+| `outputs/submissions/model_v1.csv` | Submission candidate |
 | `reports/sprint2_comparison.md` | Sprint 2 comparison |
 | `reports/sprint3_comparison.md` | Sprint 3 comparison |
 | `docs/validation_protocol.md` | 3-fold protocol note |
 
 ## 12. Version / Provenance
 
-Recorded git history on `ywan/ml-pipeline`:
+Recorded git history in the development pipeline:
 
 | Record | SHA | Message |
 |---|---|---|

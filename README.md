@@ -19,6 +19,13 @@ A predeclared V2-C blend (C1, 0.8224) was evaluated and rejected: +6 net cells, 
 
 MODEL V1 remains frozen at 75.98% 3-fold OOF. Details: [`docs/versions/model_v1.md`](docs/versions/model_v1.md).
 
+## V3 Research Program
+
+The V3 research program is **completed**. MODEL V3 was **not created**. MODEL V2 remains the frozen personal deployable model.
+
+- Program summary: [`reports/v3/v3_research_program_summary.md`](reports/v3/v3_research_program_summary.md)
+- Contribution record: [`docs/contributions/wyh_v3_contribution.md`](docs/contributions/wyh_v3_contribution.md)
+
 ---
 
 # University of Rochester Biomedical Data Science Hackathon Summer 2026

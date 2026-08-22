@@ -1,30 +1,146 @@
-# WYH Modeling Track
+# MERFISH Cell-Type Annotation — WYH Modeling Contribution
 
-## Released models
+This repository documents the WYH modeling contribution to 60-class MERFISH
+cell-type annotation over a 200-gene panel. The work includes reproducible
+validation, hierarchical classification, external-reference transfer,
+controlled model selection, and V3 research. MODEL V2 is the selected
+personal model. Team integration and official submission provenance are
+separate.
 
-| Version | Method | Validation | OOF | Official score |
+## Results Summary
+
+| Stage | Method | Evaluation | Result | Decision |
 |---|---|---|---:|---|
-| MODEL V1 | Hierarchical Signature Specialists | personal/frozen 3-fold | 75.98% | Not submitted |
-| **MODEL V2** | **Reference-only LightGBM + approved Zenodo reference** | **team-compatible 5-fold** | **82.12%** | **Not submitted** |
+| MODEL V1 | Hierarchical Signature Specialists | 3-fold competition-label OOF | 75.98% | Historical baseline |
+| **MODEL V2** | External Reference Transfer (LightGBM) | External-reference validation | **82.12%** | **Selected personal model** |
+| E06M M2 | Source-Balanced Multi-Reference LightGBM | V3 external-validation protocol | 82.18% | Experimental; not promoted |
 
-## Current Released Candidate — MODEL V2
+Evaluation protocols differ across stages and are not one homogeneous
+cross-validation protocol.
 
-MODEL V2 is the current frozen WYH candidate. It is a reference-only LightGBM fit on 136,574 cleaned cells from the approved Zenodo MERFISH spinal-cord deposit (record 18039571; MD5 `ce06f62c0ec4973581dae17bb76f0cd9`). Local 5-fold OOF accuracy is **82.12%** (4106 / 5000), **+6.14 pp** versus MODEL V1 (75.98%). There is no official leaderboard score.
+**Protocol-matched comparison** (same 5-fold partition,
+`experiments/team_folds_5_seed42.csv`):
 
-- Candidate: [`outputs/submissions/model_v2_candidate.csv`](outputs/submissions/model_v2_candidate.csv)
-- Full write-up: [`docs/versions/model_v2.md`](docs/versions/model_v2.md)
-- Test probabilities: `outputs/probabilities/V2-B-REFONLY_test_probabilities_seg.csv.gz`
+| Comparator | Result |
+|---|---:|
+| BRIDGE-YW004-5F (V1 architecture on the 5-fold file) | 75.96% |
+| MODEL V2 | 82.12% |
+| Improvement | **+6.16 percentage points / +308 correct cells** |
 
-A predeclared V2-C blend (C1, 0.8224) was evaluated and rejected: +6 net cells, mixed folds, folds 3–4 down, lower macro-F1. MODEL V2 therefore keeps the simpler reference-only architecture.
+The descriptive difference between MODEL V1 75.98% (3-fold OOF) and MODEL V2
+82.12% (external-reference validation) is a **cross-protocol** comparison, not
+the protocol-matched gain.
 
-MODEL V1 remains frozen at 75.98% 3-fold OOF. Details: [`docs/versions/model_v1.md`](docs/versions/model_v1.md).
+No verified official leaderboard score is attributed specifically to MODEL V1
+or MODEL V2 in this personal repository.
 
-## V3 Research Program
+## MODEL V2 — Selected Personal Model
 
-The V3 research program is **completed**. MODEL V3 was **not created**. MODEL V2 remains the frozen personal deployable model.
+Public method: **External Reference Transfer (LightGBM)**. Internal frozen
+identifier: `V2-B-REFONLY`.
+
+Classifier training uses the approved annotated external MERFISH reference
+(Zenodo record 18039571). After documented exclusions, **136,574** cleaned
+reference cells remain. Features and labels are aligned to the official
+200-gene / 60-class competition space. File-level provenance, checksums, and
+exclusion counts are in [`docs/data_provenance.md`](docs/data_provenance.md).
+
+Competition-train labels are used only for external validation and are not
+used to fit the LightGBM classifier. MODEL V2 reached **4106 / 5000 = 82.12%**.
+Later candidates, including
+a rejected predeclared V2-C blend (0.8224) and experimental E06M M2 (0.8218),
+did not provide sufficient robust evidence for promotion. MODEL V2 remains
+the selected WYH personal model.
+
+MODEL V2 uses the reference-LightGBM family documented in `team/main`; the
+WYH pipeline contributes the frozen personal evaluation, leakage controls,
+reproducibility artifacts, and model-selection evidence. Detailed ownership
+evidence is in [`docs/contributions/wyh_contribution_summary.md`](docs/contributions/wyh_contribution_summary.md).
+
+- Model card: [`docs/versions/model_v2.md`](docs/versions/model_v2.md)
+- Validation contracts: [`docs/validation_protocol.md`](docs/validation_protocol.md)
+- Data provenance: [`docs/data_provenance.md`](docs/data_provenance.md)
+- Submission candidate (not an official captain file):
+  [`outputs/submissions/model_v2_candidate.csv`](outputs/submissions/model_v2_candidate.csv)
+
+## Research Progression
+
+```text
+MODEL V1
+Hierarchical Signature Specialists
+75.98%  (3-fold competition-label OOF)
+        ↓
+MODEL V2
+External Reference Transfer (LightGBM)
+82.12%  (external-reference validation)
+        ↓
+V3 Research Program
+Best standalone experimental candidate: E06M M2  82.18%
+No MODEL V3 promotion
+```
+
+V3 investigated multi-reference transfer and complementary-expert strategies.
+E06M M2 reached 82.18%, only three additional correct cells over MODEL V2.
+The improvement did not satisfy the predefined robustness criteria, therefore
+MODEL V3 was not created. Diagnostic oracle coverage values from that program
+are retrospective ceilings, not deployable accuracy.
 
 - Program summary: [`reports/v3/v3_research_program_summary.md`](reports/v3/v3_research_program_summary.md)
-- Contribution record: [`docs/contributions/wyh_v3_contribution.md`](docs/contributions/wyh_v3_contribution.md)
+- V3 contribution record: [`docs/contributions/wyh_v3_contribution.md`](docs/contributions/wyh_v3_contribution.md)
+- MODEL V1 card: [`docs/versions/model_v1.md`](docs/versions/model_v1.md)
+
+## Reproducibility
+
+Install pinned dependencies from `requirements.txt` (Python 3.9.x) and run the
+official-data and freeze-contract tests. That is an integrity check, not a
+one-command full model reproduction.
+
+```sh
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python scripts/10_official_manifest.py --verify
+.venv/bin/python scripts/00_validate_data.py
+.venv/bin/python -m pytest tests/test_official_contract.py tests/test_folds.py \
+  tests/test_model_v1.py tests/test_model_v2_release.py \
+  tests/test_v3_research_program_closure.py -q
+```
+
+Full MODEL V1 / MODEL V2 retraining, external-reference placement, and
+checksum steps are documented in [`docs/reproducibility.md`](docs/reproducibility.md).
+
+## Repository Structure
+
+| Path | Role |
+|---|---|
+| [`src/merfish60/`](src/merfish60/) | Library: data contracts, Cell_ID loaders, MODEL V1, reference exclusion, V2 helpers |
+| [`scripts/`](scripts/) | Reproduction entry points for validation, MODEL V1, MODEL V2, and submission checks |
+| [`experiments/`](experiments/) | Frozen fold files, experiment registries, V3 scripts; see [`experiments/README.md`](experiments/README.md) |
+| [`outputs/`](outputs/) | Metrics, evaluation predictions, probabilities, submission candidates; see [`outputs/README.md`](outputs/README.md) |
+| [`reports/`](reports/) | Sprint comparisons, V2 methodology JSON, V3 reports, finalization audits |
+| [`docs/`](docs/) | Model cards, provenance, contribution records, documentation index |
+| [`tests/`](tests/) | Data-contract, freeze, and V3-closure tests |
+| [`data/`](data/) | Organizer-provided official challenge CSVs |
+| [`prediction/prediction.csv`](prediction/prediction.csv) | Organizer example submission; **not** a WYH model |
+
+Documentation index: [`docs/README.md`](docs/README.md).
+Final archival report: [`docs/final_project_report.md`](docs/final_project_report.md).
+
+## Contribution Scope and Attribution
+
+WYH contributions documented in this repository include validation and
+data-contract infrastructure, MODEL V1, the MODEL V2 personal freeze, V3
+research and analysis, leakage controls, and model-selection evidence.
+
+Full attribution record: [`docs/contributions/wyh_contribution_summary.md`](docs/contributions/wyh_contribution_summary.md).
+
+## Limitations
+
+Remaining errors concentrate among closely related glial subtypes, especially
+when Region / E/I / Segment metadata are missing. MODEL V2 depends on a
+matched same-study external reference and can be sensitive to domain shift.
+V3 gains were too small and insufficiently stable to justify a new version.
+Internal validation scores on the 5000 competition-train cells are distinct
+from an official hidden-test or leaderboard score.
 
 ---
 

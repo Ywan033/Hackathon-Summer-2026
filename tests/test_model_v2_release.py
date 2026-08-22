@@ -68,9 +68,15 @@ def test_readme_and_version_doc_links():
     assert "docs/versions/model_v2.md" in readme
     assert "outputs/submissions/model_v2_candidate.csv" in readme
     assert "82.12%" in readme
-    assert "Not submitted" in readme
+    assert (
+        "No verified official leaderboard score is attributed specifically to MODEL V1"
+        in readme
+    )
+    assert "Not submitted" not in readme
     assert "Original Hackathon Information" not in readme
-    assert readme.startswith("# WYH Modeling Track")
+    assert readme.startswith("# MERFISH Cell-Type Annotation — WYH Modeling Contribution")
+    assert "# University of Rochester Biomedical Data Science Hackathon Summer 2026" in readme
+    assert "Current Released Candidate" not in readme
     assert docs.startswith("# MODEL V2 — External Reference Transfer (LightGBM)")
     assert "ce06f62c0ec4973581dae17bb76f0cd9" in docs
     assert "0.8212" in docs

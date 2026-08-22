@@ -1,20 +1,22 @@
 # MODEL V1 — Hierarchical Signature Specialists
 
-This document describes the frozen MODEL V1 release. It is not an official captain-repository submission.
+This document describes frozen MODEL V1, the historical WYH baseline. It is not an official captain-repository submission.
 
 ## 1. Status
 
 | Item | Value |
 |---|---|
-| Identity | MODEL V1 candidate |
+| Identity | Frozen historical baseline |
+| Public name | Hierarchical Signature Specialists |
 | Architecture | Frozen YW-004 full-train per-signature specialists |
+| Tag | `model-v1` |
 | Selection metric | 3-fold out-of-fold (OOF) overall accuracy |
-| Primary OOF accuracy | **0.7598** (3799 / 5000) |
-| Official hidden-test score | **Not submitted** |
-| Official leaderboard score | **Not submitted** |
+| Primary OOF accuracy | **0.7598** (3799 / 5000 = 75.98%) |
+| Official hidden-test score | No verified official hidden-test score is attributable specifically to MODEL V1 in this personal repository |
+| Official leaderboard score | **Not submitted.** No verified official leaderboard score is attributable specifically to MODEL V1 in this personal repository |
 | Submission candidate | `outputs/submissions/model_v1.csv` (5000 rows; official contract) |
 
-MODEL V1 is **frozen**. The selected architecture is YW-004 hierarchical specialists. The recorded OOF accuracy is a local validation number on persisted 3-fold assignments. MODEL V1 was not submitted for official scoring, so no official hidden-test or leaderboard score is available.
+MODEL V1 is **frozen**. The selected architecture is YW-004 hierarchical specialists. The recorded OOF accuracy is conventional competition-label out-of-fold validation on persisted 3-fold assignments (`experiments/folds.csv`). No verified official hidden-test or leaderboard score is attributable specifically to MODEL V1 in this personal repository. The later selected personal model is MODEL V2; MODEL V1 remains the historical baseline.
 
 The candidate has exactly 5000 test predictions in `meta_test.csv` order, uses the official columns `Cell_ID,MERFISH_cell_type_annotation.y`, and is checked by the in-repo submission validator.
 
@@ -184,7 +186,7 @@ Submission-ready MODEL V1 candidate (not an official leaderboard file):
 | Class order | `outputs/metrics/model_v1_class_order.json` |
 | Signature routing table | `outputs/metrics/model_v1_signature_summary.csv` |
 
-Do not copy this file to `prediction/prediction.csv` as part of MODEL V1. Official team submission is a separate captain-repository action and was not performed for this MODEL V1 candidate.
+Do not copy this file to `prediction/prediction.csv` as part of MODEL V1. Official team submission is a separate captain-repository action and was not performed for this MODEL V1 file.
 
 ## 10. Reproduction
 
@@ -209,7 +211,7 @@ Requires the project virtualenv (`pandas`, `numpy`, `scikit-learn`, `scipy`, `py
 .venv/bin/python -m pytest tests/test_model_v1.py tests/test_folds.py tests/test_official_contract.py tests/test_submission_contract.py -q
 ```
 
-Expected selection number after a faithful OOF rerun: **0.7598**. MODEL V1 was not submitted for official scoring, so no official hidden-test or leaderboard score is available.
+Expected selection number after a faithful OOF rerun: **0.7598**. No verified official hidden-test or leaderboard score is attributable specifically to MODEL V1 in this personal repository.
 
 ## 11. Repository Artifacts
 
@@ -235,7 +237,7 @@ Expected selection number after a faithful OOF rerun: **0.7598**. MODEL V1 was n
 | `outputs/submissions/model_v1.csv` | Submission candidate |
 | `reports/sprint2_comparison.md` | Sprint 2 comparison |
 | `reports/sprint3_comparison.md` | Sprint 3 comparison |
-| `docs/validation_protocol.md` | 3-fold protocol note |
+| `docs/validation_protocol.md` | Frozen V1 3-fold OOF and later protocol distinctions |
 
 ## 12. Version / Provenance
 
@@ -251,14 +253,12 @@ Recorded git history in the development pipeline:
 | MODEL V1 implementation | `a4aa972` | feat: add full-train YW-004 Model V1 pipeline |
 | MODEL V1 release commit (existing) | `a3722c0` | release: create submission-ready Model V1 |
 
-Local tag `model-v1` currently points at `a3722c0`. A later documentation commit will follow this SHA, so **do not treat `a3722c0` as the final tagged documentation SHA**.
+Annotated tag `model-v1` exists and currently points at commit `395004e` (`docs: document Model V1 methodology and validation`). The earlier release commit `a3722c0` (`release: create submission-ready Model V1`) remains in history and is not the tagged documentation SHA.
 
 `outputs/metrics/model_v1_metrics.json` records `current_git_commit` = `a4aa972` (the implementation commit at artifact write time), `selected_from_run` = `YW-004`, `selected_oof_accuracy` = `0.7598`.
 
-The tag had not been pushed at the time this document was written.
-
-## 13. Limitations and Next Step
+## 13. Limitations
 
 Gene/signature specialists still struggle in the hard glial / metadata-missing regime: 2958 of 5000 training cells have no Region / E-I / Segment, OOF accuracy there is 0.6815, and 942 of 1201 errors fall in that bucket. Dominant confusions are oligodendrocyte ↔ progenitor pairs and astrocyte_2 → astrocyte_1.
 
-Spatial structure and external-reference modeling belong to **MODEL V2 development** and are **not** part of MODEL V1.
+Spatial structure and external-reference modeling are **not** part of MODEL V1. Those families were developed later; MODEL V2 is the frozen selected WYH personal model. MODEL V1 remains the frozen historical baseline.

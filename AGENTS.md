@@ -1,144 +1,119 @@
-# AGENTS.md — Hackathon Summer 2026 ML Development Guide
+# AGENTS.md — WYH Modeling Track Developer Contract
 
-This file defines the persistent development, validation, release, collaboration,
-and Git rules for the WYH modeling track of the University of Rochester
-Biomedical Data Science Hackathon Summer 2026.
+This file is the developer/agent contract for the WYH modeling track of the
+University of Rochester Biomedical Data Science Hackathon Summer 2026.
 
-Codex must read this file before making changes.
+It is **not** a public README.
+
+Read this file before modifying the repository. The project is in a closed
+archival state. Do not reopen modeling unless the user explicitly authorizes
+a new formal experiment or correction.
 
 ---
 
-# 1. Repository and Branch Roles
+# 1. Canonical final state
+
+| Identity | Public name | Status | Result | Evaluation |
+|---|---|---|---|---|
+| **MODEL V1** | Hierarchical Signature Specialists | Frozen historical baseline | 3799 / 5000 = **0.7598 (75.98%)** | Conventional frozen 3-fold competition-label OOF (`experiments/folds.csv`) |
+| **MODEL V2** | External Reference Transfer (LightGBM) | Frozen **selected WYH personal model** | 4106 / 5000 = **0.8212 (82.12%)** | Honest external-reference validation on the 5000 competition-train cells |
+| **V3 program** | — | **Completed.** MODEL V3 was **not created.** | Best experimental standalone: E06M M2 4109 / 5000 = 0.8218 | Not promoted |
+
+Internal frozen identifier for MODEL V2: **`V2-B-REFONLY`**. Preserve that
+string in artifacts, scripts, tests, and tags. Do not rename frozen files.
+
+There is **no public modeling stage after V3**.
+
+Do not treat diagnostic oracle coverage as deployable accuracy.
+
+No verified official leaderboard score is attributable specifically to
+MODEL V1 or MODEL V2 in this personal repository. Do not invent
+captain-submission provenance.
+
+---
+
+# 2. Repository and branch roles
 
 ## Personal development source of truth
 
-Repository:
+Repository: `Ywan033/Hackathon-Summer-2026`
 
-`Ywan033/Hackathon-Summer-2026`
+Branch: `ywan/ml-pipeline`
 
-Development branch:
+This branch is the source of truth for:
 
-`ywan/ml-pipeline`
-
-This is the primary development source of truth for:
-
-- MODEL V1
-- MODEL V2
-- MODEL V3+
-- experiments
-- validation
+- frozen MODEL V1
+- frozen MODEL V2
+- the completed V3 research program
+- validation contracts
 - error analysis
 - documentation
-- version releases
-- release tags
+- version tags `model-v1` and `model-v2`
 
-All new MODEL V3+ research and development should happen here unless explicitly
-instructed otherwise.
-
-Do NOT merge routine modeling development into personal `main` during the
-competition.
-
-Personal `main` should remain relatively close to upstream.
-
----
+Do not merge archival documentation into personal `main` as a substitute for
+this branch. Personal `main` should remain relatively close to upstream.
 
 ## Team collaboration / delivery repository
 
-Repository:
+Repository: `X0X0X00/Hackathon-Summer-2026`
 
-`X0X0X00/Hackathon-Summer-2026`
+WYH team branch: `wyh` (`team/wyh`)
 
-WYH team branch:
+`team/wyh` is **not** the daily development branch. Only mature, validated
+release checkpoints from `ywan/ml-pipeline` were integrated there.
 
-`wyh`
-
-The team `wyh` branch is NOT the daily development branch.
-
-Only mature, validated release checkpoints from `ywan/ml-pipeline` should be
-integrated into `team/wyh`.
-
-The purpose of `team/wyh` is:
+Purpose of `team/wyh`:
 
 - team collaboration
 - reproducibility
 - ensemble use
 - contribution traceability
 - mature code delivery
-- sharing OOF/test probability artifacts
+- sharing evaluation / test probability artifacts
 
-Do NOT create a separate `ywan/ml-pipeline` branch in the team repository.
+Do not create a separate `ywan/ml-pipeline` branch in the team repository.
 
 Never force-push `team/wyh`.
 
----
-
 ## Team branch mapping
 
-When analyzing teammate work, use the following mapping:
+When inspecting teammate work, use remote-tracking branches as read-only
+references:
 
-- `team/main`
-  - zzh's main work / current team integration line
-
-- `team/revert-1-lzh`
-  - inspect especially `/work`
-  - lzh's work / method line
-
-- `team/yhh`
-  - yhh's work / method line
-
-- `team/wyh`
-  - WYH mature team delivery branch
-
-Important:
+- `team/main` — zzh / team integration line
+- `team/revert-1-lzh` — inspect especially `/work`; lzh method line
+- `team/yhh` — yhh method line
+- `team/wyh` — WYH mature team delivery branch
 
 Files visible on a teammate branch may have been inherited from shared team
-history.
-
-Do NOT automatically attribute every visible file, model, or method on a branch
-to that teammate.
-
-Use branch-specific commits, reports, README changes, and experiments when
-making contribution attributions.
-
----
+history. Do not automatically attribute every visible file, model, or method
+on a branch to that teammate. Use branch-specific commits, reports, README
+changes, and experiments when making contribution attributions.
 
 ## Captain official-submission repository
 
-Repository:
+Repository: `Baiyu-ying05/Hackathon-Summer-2026`
 
-`Baiyu-ying05/Hackathon-Summer-2026`
-
-This repository receives the team-selected daily candidate for official
+This repository received the team-selected daily candidate for official
 leaderboard scoring.
 
-Do NOT modify the captain repository unless explicitly authorized.
+Do not modify the captain repository unless explicitly authorized.
 
-Do NOT treat a local OOF score as an official leaderboard score.
+Do not treat a local validation score as an official leaderboard score.
 
 ---
 
-# 2. Competition Task
+# 3. Competition task
 
-Task:
-
-Predict:
-
-`MERFISH_cell_type_annotation`
-
-for the official MERFISH test cells.
-
-Competition data:
+Predict `MERFISH_cell_type_annotation` for the official MERFISH test cells.
 
 - 5000 train cells
 - 5000 test cells
 - 200 competition genes
 - 60 cell-type classes
+- official metric: overall accuracy
 
-Competition metric:
-
-overall accuracy
-
-Official competition files:
+Official files:
 
 - `data/counts_train.csv`
 - `data/counts_test.csv`
@@ -147,240 +122,154 @@ Official competition files:
 
 Test targets must remain hidden.
 
-Cell_ID must always remain a lossless string.
-
-Never cast the 19-digit Cell_ID values through floating-point representations.
-
----
-
-# 3. Frozen MODEL V1
-
-Release tag:
-
-`model-v1`
-
-Documentation:
-
-`docs/versions/model_v1.md`
-
-Selected architecture:
-
-YW-004 Hierarchical Signature Specialists
-
-Validation:
-
-- frozen 3-fold protocol
-- OOF accuracy: `0.7598`
-- correct: `3799 / 5000`
-
-Architecture:
-
-`(Region, E/I, Segment)` signature routing
-
-Single-class signatures:
-
-→ deterministic prediction
-
-Ambiguous signatures:
-
-→ per-signature multinomial L2 Logistic Regression specialist
-
-Gene features:
-
-→ log1p-transformed official 200-gene counts
-
-Fallback:
-
-→ global gene-only Logistic Regression
-
-MODEL V1 is frozen.
-
-Do NOT modify:
-
-- MODEL V1 architecture
-- MODEL V1 submission candidate
-- MODEL V1 metrics
-- MODEL V1 release tag
-- frozen V1 validation folds
-
-unless the user explicitly authorizes a new formal correction or version.
+Cell_ID must always remain a lossless string. Never cast the 19-digit Cell_ID
+values through floating-point representations.
 
 ---
 
-# 4. Frozen MODEL V2
+# 4. Frozen MODEL V1
 
-Release tag:
+| Item | Value |
+|---|---|
+| Public name | Hierarchical Signature Specialists |
+| Internal origin | Frozen YW-004 full-train per-signature specialists |
+| Tag | `model-v1` |
+| Documentation | `docs/versions/model_v1.md` |
+| Result | **0.7598** (3799 / 5000) |
+| Evaluation | Frozen 3-fold competition-label OOF (`experiments/folds.csv`) |
+| Status | Frozen historical baseline |
+| Official score | No verified official leaderboard score is attributable specifically to MODEL V1 in this personal repository |
 
-`model-v2`
+Architecture summary: `(Region, E/I, Segment)` signature routing; single-class
+signatures are deterministic; ambiguous signatures use per-signature multinomial
+L2 logistic regression on log1p official 200-gene counts; fallback is a global
+gene-only logistic regression.
 
-Documentation:
-
-`docs/versions/model_v2.md`
-
-Final selected architecture:
-
-`V2-B-REFONLY`
-
-Model family:
-
-Reference-only LightGBM
-
-Team-compatible 5-fold OOF:
-
-`0.8212`
-
-Correct cells:
-
-`4106 / 5000`
-
-Macro-F1:
-
-approximately `0.7936`
-
-Fold accuracies:
-
-- Fold 0: `0.822`
-- Fold 1: `0.831`
-- Fold 2: `0.812`
-- Fold 3: `0.821`
-- Fold 4: `0.820`
-
-Slice performance:
-
-- hard metadata-missing bucket: `0.7569`
-- neuron: `0.9198`
-- glial / non-neuronal: `0.7629`
-
-Delta:
-
-- vs MODEL V1 `0.7598`: `+0.0614`
-- vs BRIDGE `0.7596`: `+0.0616`
-- vs V2-A `0.7690`: `+0.0522`
-
-Official leaderboard score:
-
-`Not submitted`
-
-MODEL V2 is frozen.
+Do not modify MODEL V1 architecture, submission candidate, metrics, release
+tag, or frozen V1 validation folds unless the user explicitly authorizes a
+formal correction.
 
 ---
 
-# 5. MODEL V2 Development History
+# 5. Frozen MODEL V2
+
+| Item | Value |
+|---|---|
+| Public name | External Reference Transfer (LightGBM) |
+| Internal frozen ID | `V2-B-REFONLY` |
+| Tag | `model-v2` |
+| Documentation | `docs/versions/model_v2.md` |
+| Result | **0.8212** (4106 / 5000) |
+| Macro-F1 | approximately 0.7936 |
+| Evaluation | Honest external-reference validation on the 5000 competition-train cells |
+| Fold file | `experiments/team_folds_5_seed42.csv` (robustness / evaluation partition) |
+| Status | Frozen selected WYH personal model |
+| Official score | No verified official leaderboard score is attributable specifically to MODEL V2 in this personal repository |
+
+LightGBM is fit **only on the 136,574 cleaned Zenodo reference rows**.
+Competition training labels are **not** the boosting target. Do **not** call
+0.8212 conventional competition-label OOF.
+
+Fold accuracies: 0.822 / 0.831 / 0.812 / 0.821 / 0.820.
+
+Slice performance: hard metadata-missing bucket 0.7569; neuron 0.9198;
+glial / non-neuronal 0.7629.
+
+Protocol-matched comparator: **BRIDGE-YW004-5F = 0.7596**.
+Protocol-matched improvement:
+
+`0.8212 − 0.7596 = +0.0616` (**+6.16 percentage points**)
+
+The descriptive **cross-protocol** difference between MODEL V1 3-fold OOF
+0.7598 and MODEL V2 external-reference validation 0.8212 is **+0.0614 /
++6.14 percentage points**. That +6.14 pp figure is not the protocol-matched
+improvement.
+
+A predeclared V2-C blend (C1, 0.8224) was evaluated and **rejected**. MODEL V2
+remains `V2-B-REFONLY`.
+
+## Attribution nuance
+
+The LightGBM specification / defaults used by MODEL V2 are documented as
+deriving from the `team/main` `ext_refonly.py` implementation
+(`reports/V2-B-REFONLY_methodology.json`: `read_only_source` =
+`team/main via git show`).
+
+WYH owns the personal MODEL V2 freeze, external-reference evaluation
+contract, reproducibility, leakage-control implementation, artifacts, and
+model-selection evidence.
+
+That is distinct from originating every underlying modeling component or
+default. Do not claim that WYH originated the reference-LightGBM modeling
+idea.
+
+---
+
+# 6. MODEL V2 development history (frozen identifiers)
+
+Preserve these internal IDs exactly.
 
 ## BRIDGE-YW004-5F
 
-Purpose:
-
-Evaluate frozen YW-004 under the team-compatible 5-fold protocol.
-
-OOF:
-
-`0.7596`
-
-This is a bridge benchmark, not a new formal MODEL version.
-
----
+Evaluate frozen YW-004 under the team-compatible 5-fold partition.
+Accuracy: `0.7596`. Bridge benchmark, not a new formal MODEL version.
 
 ## V2-A-SPATIAL-LGBM
 
-Competition-only Spatial LightGBM.
-
-Key information:
-
-- normalized gene features
-- PCA
-- same-section spatial neighbors
-- expression-space neighbors
-- fold-safe neighbor-label histograms
-- metadata
-- LightGBM
-- E/I constraint
-
-Best OOF:
-
-`0.7690`
-
-V2-A improved over BRIDGE but did not reach reference-model performance.
-
----
+Competition-only spatial LightGBM (normalized genes, PCA, same-section
+spatial neighbors, expression-space neighbors, fold-safe neighbor-label
+histograms, metadata, E/I constraint). Best recorded accuracy: `0.7690`.
 
 ## V2-B-REFONLY
 
-Approved external-reference route.
-
-OOF:
-
-`0.8212`
-
-This became the final MODEL V2.
-
----
+Approved external-reference route. Accuracy: `0.8212`. Selected MODEL V2.
 
 ## V2-C fixed blend audit
 
-Only five predeclared probability blends were evaluated.
-
-No arbitrary weight search was allowed.
-
-The strongest blend:
-
-C1
-
-- Reference: `0.75`
-- Spatial: `0.25`
-- OOF: `0.8224`
-
-It was rejected because:
-
-- only `+6` net correct cells
-- folds 3–4 regressed
-- fold behavior was mixed
-- macro-F1 decreased
-- extra complexity was not justified
-
-Therefore:
-
-MODEL V2 remains `V2-B-REFONLY`.
-
-Do NOT replace MODEL V2 with the 0.8224 blend without a new formal experiment.
+Only five predeclared probability blends were evaluated. No arbitrary weight
+search. Strongest blend C1 (Reference 0.75 / Spatial 0.25) scored `0.8224`
+and was rejected (+6 net cells, mixed folds, folds 3–4 regressed, lower
+macro-F1). Do not replace MODEL V2 with that blend without a new formal
+experiment.
 
 ---
 
-# 6. External Reference Dataset
+# 7. Completed V3 research program
 
-Approved source:
+MODEL V3 was **not created**. The V3 program is **completed**.
 
-Zenodo record:
+Authoritative summary: `reports/v3/v3_research_program_summary.md`
 
-`18039571`
+Best standalone experimental candidate: **E06M M2 = 4109 / 5000 = 0.8218**.
+Promotion was **not justified** (net +3 vs MODEL V2; McNemar p = 0.8895;
+folds 3–4 net −9; bootstrap CI includes 0). MODEL V2 remains selected.
 
-File:
+Diagnostic oracle coverage (for example five-expert 4393 / 5000 = 0.8786, or
+the earlier three-expert 4414 / 5000 = 0.8828) is a **retrospective coverage
+ceiling**. It requires ground-truth knowledge and a perfect selector. It is
+not deployable accuracy, not OOF accuracy, and not a MODEL V3 score.
 
-`MERFISH_spinal_cord_resolved_0718.h5ad`
+Do not start a public MODEL V4, routing, blending, or additional reference
+stage from this contract.
 
-Expected local path:
-
-`work/external/MERFISH_spinal_cord_resolved_0718.h5ad`
-
-MD5:
-
-`ce06f62c0ec4973581dae17bb76f0cd9`
-
-Raw reference:
-
-- 146,621 cells
-- 500 genes
-
-Competition genes:
-
-- 200 / 200 available
-- must be aligned in exact official competition order
-
-Reference taxonomy:
-
-- all 60 competition classes represented
+Historical V3 stage IDs `V3-E00T` … `V3-E07D` are frozen experiment
+identifiers. Preserve them.
 
 ---
+
+# 8. External reference dataset
+
+Approved source: Zenodo record `18039571`
+
+File: `MERFISH_spinal_cord_resolved_0718.h5ad`
+
+Local path: `work/external/MERFISH_spinal_cord_resolved_0718.h5ad`
+
+MD5: `ce06f62c0ec4973581dae17bb76f0cd9`
+
+Raw reference: 146,621 cells × 500 genes. All 200 competition genes are
+available and must be aligned in exact official competition order. All 60
+competition classes are represented.
 
 ## Required exclusion policy
 
@@ -390,17 +279,9 @@ Before reference modeling, remove:
 - all 5000 competition test Cell_IDs
 - all exact aligned 200-gene count-vector duplicates
 
-Historical independently reproduced exact-vector duplicates:
+Historical independently reproduced exact-vector duplicates: `47`
 
-`47`
-
-Final usable reference cells:
-
-`136,574`
-
-These counts were independently reproduced.
-
----
+Final usable reference cells: `136,574`
 
 ## External-data Git policy
 
@@ -411,56 +292,54 @@ Never commit:
 - `work/external/cache/*.npz`
 - disposable external preprocessing caches
 
-The following may be committed:
+The following may be committed: provenance metadata, MD5 metadata, exclusion
+manifests, alignment audits, and reproducible preparation/modeling code.
 
-- provenance metadata
-- MD5 metadata
-- exclusion manifests
-- alignment audits
-- reproducible preparation/modeling code
-
----
-
-# 7. Validation Protocols
-
-## MODEL V1 frozen protocol
-
-File:
-
-`experiments/folds.csv`
-
-Protocol:
-
-StratifiedKFold(
-    n_splits=3,
-    shuffle=True,
-    random_state=20260819
-)
-
-Do not overwrite.
+Additional V3 source `SNI_merged_0917.h5ad` is documented in
+`docs/data_provenance.md` and V3-E04S/E06M reports. It is not a MODEL V2
+training source.
 
 ---
 
-## MODEL V2+ team-compatible protocol
+# 9. Validation protocols
 
-File:
+There are **two** frozen protocols. They are not interchangeable.
 
-`experiments/team_folds_5_seed42.csv`
+Full definitions: `docs/validation_protocol.md`
 
-Protocol:
+## MODEL V1 — competition-label 3-fold OOF
 
-StratifiedKFold(
-    n_splits=5,
-    shuffle=True,
-    random_state=42
-)
+File: `experiments/folds.csv`
 
-Use this protocol for team-compatible MODEL V2+ comparisons unless a new
-validation design is explicitly approved.
+```text
+StratifiedKFold(n_splits=3, shuffle=True, random_state=20260819)
+```
+
+Competition labels **are** the fitting target. Each train-cell prediction is
+genuinely out-of-fold. Result: `0.7598`. Do not overwrite this file.
+
+## MODEL V2 / V3 — team-compatible 5-fold partition
+
+File: `experiments/team_folds_5_seed42.csv`
+
+```text
+StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+```
+
+For MODEL V2 this file is the common **evaluation / robustness partition**.
+LightGBM is not fit on competition labels. Predictions on the 5000
+competition-train cells are honest **external-reference validation**, not
+conventional competition-label OOF. Result: `0.8212`.
+
+V3 experimental candidates used the same partition unless a frozen report
+says otherwise. Teammate comparators may have native protocols (LZH Prior-H
+is native 3-fold).
+
+Do not overwrite either fold file.
 
 ---
 
-# 8. Leakage Rules
+# 10. Leakage rules
 
 Never use competition test labels.
 
@@ -479,361 +358,107 @@ Held-out competition fold labels must remain invisible from:
 Reference labels may remain visible when approved external-reference use is
 permitted.
 
-Competition test features may be used only where allowed as unlabeled features.
-
-Any transductive use of train + test features must be explicitly documented.
+Competition test features may be used only where allowed as unlabeled
+features. Any transductive use of train + test features must be explicitly
+documented.
 
 ---
 
-# 9. Overfitting / Model-Selection Rules
+# 11. Overfitting / model-selection / promotion principles
 
-Do NOT:
+Do not:
 
 - select lucky seeds
 - repeatedly change CV splits because a score is higher
-- perform broad post-hoc blend-weight search on full OOF
-- optimize arbitrary ensemble weights with scipy
-- optimize arbitrary ensemble weights with greedy search
-- optimize arbitrary ensemble weights with Nelder-Mead
-- fit a meta-model and report performance on the same OOF used to fit it
+- perform broad post-hoc blend-weight search on full evaluation predictions
+- optimize arbitrary ensemble weights with scipy, greedy search, or
+  Nelder-Mead
+- fit a meta-model and report performance on the same evaluation used to
+  fit it
 - tune specialists on the same held-out cells used for final reporting
 - use leaderboard feedback as the primary model-selection signal
+- create a formal MODEL number for a statistically unsupported gain
 
 Prefer:
 
 - predeclared experiments
 - fixed folds
 - nested selection when labels are used for model decisions
-- locked holdout validation
+- locked holdout / stability partitions
 - conservative acceptance criteria
 - simpler models when gains are within expected CV noise
+- preservation of negative results
 
-MODEL V2 intentionally rejected a nominally higher 0.8224 blend because the
-gain was not sufficiently robust.
+MODEL V2 rejected a nominally higher 0.8224 blend. V3 rejected M2 (0.8218)
+as a version. Preserve that promotion standard.
 
-Preserve this model-selection standard.
+Formal MODEL V1 / MODEL V2 are frozen releases. Experiment IDs such as
+YW-004, V2-A, V2-B, V2-C, M2, and V3-E00T…V3-E07D are experimental
+components, not additional formal versions.
+
+Do not create a new formal MODEL Vn unless the user explicitly authorizes it
+and the historical release standard in the frozen documentation is met.
 
 ---
 
-# 10. Submission Safety
+# 12. Submission safety
 
-Personal model development must NOT modify:
+Personal model development must **not** modify:
 
 `prediction/prediction.csv`
 
-This belongs to the team/captain submission workflow.
+That file belongs to the team/captain submission workflow.
 
-Personal candidates belong under:
-
-`outputs/submissions/`
-
-Examples:
+Personal candidates belong under `outputs/submissions/`, for example:
 
 - `outputs/submissions/model_v1.csv`
 - `outputs/submissions/model_v2_candidate.csv`
 
 A candidate is not an official leaderboard submission.
 
-Official score must be reported as:
-
-`Not submitted`
-
-unless the exact model was actually selected into the captain repository and
-officially scored.
+No verified official leaderboard score is attributable specifically to
+MODEL V1 or MODEL V2 in this personal repository unless exact
+captain-submission provenance is later established. Do not invent that
+provenance.
 
 ---
 
-# 11. Formal Version Release Standard
+# 13. Attribution boundaries
 
-Every formal MODEL Vn release must contain:
+WYH-owned on `ywan/ml-pipeline`:
 
-1. reproducible implementation
-2. fixed validation protocol
-3. OOF predictions
-4. OOF probabilities
-5. test probabilities
-6. machine-readable metrics
-7. fold scores
-8. slice metrics
-9. error analysis
-10. leakage audit
-11. overfitting / model-selection audit
-12. validated submission candidate
-13. version-specific documentation:
-   `docs/versions/model_vn.md`
-14. root README update
-15. implementation / experiment / release commits
-16. annotated tag:
-   `model-vn`
-17. push to:
-   `origin/ywan/ml-pipeline`
+- validation contracts and Cell_ID integrity
+- MODEL V1 / YW-004 implementation and freeze
+- MODEL V2 personal freeze and reproducibility
+- external-reference evaluation pipeline
+- exclusion / leakage safeguards
+- MODEL V2 probability / artifact generation
+- V3 E00T–E07D research and analysis
+- SNI / M2 experimentation where evidenced
+- contribution / reproducibility infrastructure
+- personal-branch documentation and team-handoff artifacts where evidenced
 
-Only after the version is mature should it be integrated into:
+Not WYH-owned:
 
-`team/wyh`
+- LZH Prior-H (`depth_masked_prior_h_anchor`)
+- YHH models
+- `team/main` integration
+- team final ensemble
+- `prediction/prediction.csv` unless exact provenance later proves otherwise
 
-Every formal version must have professional README/documentation.
-
-Do not create formal MODEL numbers for every experiment.
-
-Experiment IDs such as:
-
-- YW-004
-- V2-A
-- V2-B
-- V2-C
-
-are experimental components.
-
-MODEL V1 / MODEL V2 / MODEL V3 are formal frozen releases.
+YHH cell-level OOF was recorded as unavailable during the V3 program. Do not
+retroactively rewrite that V3-era statement.
 
 ---
 
-# 12. Current Team Model Landscape
-
-Use this only as current research context.
-
-Always re-fetch remote team branches before making decisions.
-
-## zzh / team main
-
-Primary role:
-
-strong team anchor / integration line
-
-Historical strategy includes:
-
-- spatial / expression kNN features
-- LightGBM
-- bagging
-- external-reference members
-- MLP members
-- ensemble integration
-
-Current team main may advance frequently.
-
-Always run:
-
-`git fetch team --prune`
-
-before comparing current methods.
-
----
-
-## lzh
-
-Inspect:
-
-`team/revert-1-lzh`
-
-especially:
-
-`work/`
-
-Recent work may include:
-
-- biology priors
-- graph residuals
-- Gene-token representations
-- MNN / graph methods
-- conservative gated corrections
-
-Do not assume lzh validation uses the exact same fold protocol as WYH.
-
----
-
-## yhh
-
-Inspect:
-
-`team/yhh`
-
-Recent work includes:
-
-- strong reference ensemble
-- hierarchical specialists
-- glial / meninges / subtype corrections
-
-Reported high OOF results require validation under common member files / folds
-before direct comparison.
-
----
-
-## wyh
-
-Team delivery branch:
-
-`team/wyh`
-
-Contains mature WYH MODEL V1 and MODEL V2 contributions.
-
-Daily research development remains on:
-
-`origin/ywan/ml-pipeline`
-
----
-
-# 13. MODEL V3 — Current Research State
-
-MODEL V3 is NOT defined or frozen yet.
-
-Do NOT immediately train another large model.
-
-The first MODEL V3 task should be:
-
-## Canonical cross-model complementarity / headroom audit
-
-Candidate experts:
-
-- zzh / team anchor
-- lzh current strong model
-- yhh current strong model
-- WYH MODEL V2
-
-Before comparing, align exactly:
-
-- Cell_ID
-- fold definitions where possible
-- official 60-class ordering
-- OOF probability format
-- evaluation population
-
-Compute:
-
-- individual accuracy
-- pairwise disagreements
-- pairwise oracle accuracy
-- 3-model oracle accuracy
-- 4-model oracle accuracy
-- exclusive-correct cells
-- all-model-wrong cells
-- slice-level complementarity
-- major confusion families
-
-Oracle accuracy is diagnostic headroom only.
-
-It is NOT a model score.
-
----
-
-# 14. Existing WYH Headroom Evidence
-
-Internal WYH experts:
-
-- hierarchical expert
-- spatial expert
-- reference expert
-
-Three-expert diagnostic oracle:
-
-`0.8828`
-
-Correct:
-
-`4414 / 5000`
-
-Reference MODEL V2 correct:
-
-`4106 / 5000`
-
-Oracle headroom:
-
-`308 cells`
-
-Exclusive correct:
-
-- only hierarchical expert: `111`
-- only spatial expert: `90`
-- only reference expert: `241`
-
-All three wrong:
-
-`586`
-
-This demonstrates meaningful expert complementarity.
-
-However:
-
-static fixed probability blending did NOT convert this oracle headroom into a
-robust improvement.
-
-This motivates testing cell-adaptive reliability modeling.
-
----
-
-# 15. Initial MODEL V3 Research Hypothesis
-
-Potential direction:
-
-## Reliability-Gated / Cell-Adaptive Expert Routing
-
-Research question:
-
-Can test-time-safe reliability signals identify which expert should be trusted
-for a given MERFISH cell better than static probability averaging?
-
-Potential expert families:
-
-- reference expert
-- spatial expert
-- hierarchical expert
-- future independently validated team experts
-
-Potential reliability signals:
-
-- expert entropy
-- top1 probability
-- top1-top2 margin
-- expert disagreement
-- reference-neighbor consensus
-- reference distance / density
-- spatial-neighbor agreement
-- expression-neighbor agreement
-- Region
-- E/I
-- Segment
-- metadata missingness
-- hard-bucket flag
-- library size
-- detected-gene count
-- graph degree / graph confidence
-
-Do NOT build the router simply because it sounds advanced.
-
-First prove sufficient cross-model oracle headroom under a canonical evaluation
-protocol.
-
----
-
-# 16. Potential Future External References
-
-Do not add new external datasets blindly.
-
-The current approved same-study Zenodo reference has the smallest domain gap and
-must remain the primary reference.
-
-Potential future references may include mouse spinal-cord atlases, but every new
-source must pass:
-
-- biological compatibility
-- gene coverage
-- taxonomy mapping
-- source provenance audit
-- overlap / duplicate audit
-- distribution-shift analysis
-- fixed-OOF transfer validation
-- complementarity analysis
-
-Do not concatenate multiple external datasets without source-aware auditing.
-
----
-
-# 17. Git Safety Rules
+# 14. Git safety rules
 
 Before every task:
 
+```text
 git branch --show-current
 git status --short
+```
 
 Do not perform any of the following unless explicitly authorized:
 
@@ -847,128 +472,108 @@ Do not perform any of the following unless explicitly authorized:
 - tag creation/deletion
 - force push
 
-Never run:
+Never run `git push --force` on team branches.
 
-`git push --force`
+Never directly modify `team/main` during normal WYH work.
 
-on team branches.
+Do not modify:
 
-Never directly modify:
-
-`team/main`
-
-during normal WYH development.
+- `prediction/prediction.csv`
+- official `data/*.csv`
+- organizer-provided README content below the WYH block separator
+- frozen MODEL V1 / V2 / V3 numeric artifacts
+- tags `model-v1` / `model-v2`
+- historical internal experiment IDs in filenames
 
 ---
 
-# 18. Working with Team Branches
+# 15. Working with team branches
 
 Before reading current teammate work:
 
+```text
 git fetch team --prune
+```
 
-Use remote-tracking branches as read-only methodology references.
+Use remote-tracking branches as read-only methodology references. Prefer:
 
-Prefer:
-
+```text
 git show team/main:path/to/file
-
 git show team/yhh:path/to/file
-
 git show team/revert-1-lzh:path/to/file
+```
 
 Do not checkout teammate branches merely to inspect their code.
 
 ---
 
-# 19. Codex First-Run Handoff Procedure
+# 16. First-run handoff procedure
 
-When Codex first opens this repository on a new machine:
-
-Read, in order:
+When an agent first opens this repository on a new machine, read in order:
 
 1. `AGENTS.md`
 2. `README.md`
 3. `docs/versions/model_v1.md`
 4. `docs/versions/model_v2.md`
-5. recent Git history
-6. experiment registries
-7. current Git branch/status
+5. `docs/validation_protocol.md`
+6. `reports/v3/v3_research_program_summary.md`
+7. `docs/contributions/wyh_contribution_summary.md`
+8. recent Git history
+9. current Git branch / status
 
-Before modifying any file, Codex must summarize:
+Before modifying any file, summarize:
 
 - repository and branch roles
 - frozen MODEL V1
 - frozen MODEL V2
-- validation protocols
+- completed V3 program (MODEL V3 not created)
+- validation-protocol distinction (3-fold OOF vs external-reference validation)
 - external-reference provenance
 - leakage rules
-- formal release standard
-- team branch mapping
-- current MODEL V3 research question
+- attribution boundaries
 
-Do not modify files during this initial handoff audit.
+Do not modify files during that initial handoff audit.
 
 ---
 
-# 20. New-Machine Environment Check
+# 17. New-machine environment check
 
-After cloning the repository, verify:
+After cloning:
 
+```text
 git branch --show-current
 git status --short
 git tag --list
+```
 
-Expected development branch:
+Expected development branch: `ywan/ml-pipeline`
 
-`ywan/ml-pipeline`
+Expected frozen tags: `model-v1`, `model-v2`
 
-Expected frozen tags:
+Install dependencies from `requirements.txt`. Do not copy another machine’s
+`.venv`.
 
-- `model-v1`
-- `model-v2`
+Copy the approved external reference separately to
+`work/external/MERFISH_spinal_cord_resolved_0718.h5ad` and verify MD5
+`ce06f62c0ec4973581dae17bb76f0cd9` before any reference reproduction.
 
-Install dependencies from:
-
-`requirements.txt`
-
-Do NOT copy the old machine's `.venv`.
-
-Copy the approved external reference separately to:
-
-`work/external/MERFISH_spinal_cord_resolved_0718.h5ad`
-
-Verify the MD5 before any reference modeling:
-
-`ce06f62c0ec4973581dae17bb76f0cd9`
-
-Run the full test suite before MODEL V3 development.
+Run the relevant test suite before changing validation or release contracts.
+Do not retrain frozen models unless explicitly authorized.
 
 ---
 
-# 21. Research Working Style
+# 18. Archival working style
 
-Follow an evidence-driven workflow:
-
-Problem / hypothesis
-→ controlled experiment
-→ fixed validation
-→ error analysis
-→ decision
-→ reproducibility
-→ documentation
-→ formal release only when mature
-
-Distinguish clearly:
+Follow an evidence-driven workflow. Distinguish:
 
 - research hypothesis
 - engineering implementation
 - empirical evidence
 - inference / speculation
 
-Negative results are valuable and should be recorded.
+Negative results are part of the frozen record.
 
-Do not optimize only for a higher single OOF number.
+Do not optimize only for a higher single validation number.
 
 Prioritize:
 
@@ -978,3 +583,8 @@ Prioritize:
 - overfitting control
 - team usefulness
 - contribution traceability
+- protection of frozen artifacts
+
+Public documentation polish of the README WYH block is a separately
+authorized archival phase. Do not rewrite `README.md` unless explicitly
+asked.

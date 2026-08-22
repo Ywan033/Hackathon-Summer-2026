@@ -15,10 +15,12 @@ Supported by the personal repository history:
 
 - reproducible validation pipeline foundation (official contracts, Cell_ID
   integrity, frozen fold files, submission validators)
-- personal **MODEL V1** (hierarchical signature specialists; frozen tag
-  `model-v1`; OOF 0.7598)
-- personal **MODEL V2** (reference-only LightGBM on the approved Zenodo
-  MERFISH deposit; frozen tag `model-v2`; 0.8212, 4106 / 5000)
+- personal **MODEL V1** (Hierarchical Signature Specialists; frozen tag
+  `model-v1`; conventional 3-fold competition-label OOF 0.7598)
+- personal **MODEL V2** (External Reference Transfer (LightGBM); internal
+  frozen ID `V2-B-REFONLY`; frozen tag `model-v2`; 0.8212, 4106 / 5000;
+  honest external-reference validation, not conventional competition-label
+  OOF)
 - external-reference modeling, provenance, and duplicate-exclusion work for
   the approved Zenodo file
   (`ce06f62c0ec4973581dae17bb76f0cd9`; usable 136,574)
@@ -55,7 +57,10 @@ cell-level artifacts are unavailable. They are not re-attributed here.
 
 ### Personally implemented / evaluated
 
-- MODEL V2 external-reference LightGBM (V2-B-REFONLY)
+- MODEL V2 External Reference Transfer (LightGBM) personal freeze
+  (`V2-B-REFONLY`); LightGBM defaults documented as deriving from
+  `team/main` `ext_refonly.py`. WYH owns the freeze, evaluation contract,
+  artifacts, and selection evidence, not origination of those defaults.
 - V3 analysis and modeling scripts under `experiments/v3/`
 - S0 / privileged-gene teacher–student evaluation (E02D)
 - weak-expert rescue audit of frozen S0 (E03A; no gate trained)
@@ -81,7 +86,7 @@ Defensible numbers only. Diagnostic oracles are not personal accuracy.
 
 | Contribution | Value | Kind |
 |---|---|---|
-| Frozen personal MODEL V2 | 0.8212 (4106 / 5000) | deployable standalone |
+| Frozen personal MODEL V2 | 0.8212 (4106 / 5000) | deployable standalone; external-reference validation |
 | Experimental M2 candidate | 0.8218 (4109 / 5000) | experimental; not MODEL V3 |
 | SNI new unique recoveries beyond LZH + WYH + S0 | 53 | diagnostic complementarity |
 | Four-expert diagnostic oracle | 0.8728 (4364 / 5000) | coverage ceiling |
@@ -147,8 +152,9 @@ E00T snapshot was prediction-only (team blend v9). All team-main content
 is not attributed to one person, and not to WYH.
 
 **WYH.** Owns the personal-branch experiments and artifacts documented by
-the personal Git history on `ywan/ml-pipeline`, including MODEL V1, MODEL V2,
-and V3-E00T through V3-E07D.
+the personal Git history on `ywan/ml-pipeline`, including MODEL V1, the
+MODEL V2 personal freeze (not origination of the `team/main` `ext_refonly.py`
+defaults), and V3-E00T through V3-E07D.
 
 Statements that cannot be verified from committed artifacts are omitted.
 
@@ -156,7 +162,8 @@ Statements that cannot be verified from committed artifacts are omitted.
 
 ## 8. Final Personal Result
 
-MODEL V2 remains the personal frozen deployable model (0.8212).
+MODEL V2 remains the personal frozen selected model (0.8212; External
+Reference Transfer (LightGBM); `V2-B-REFONLY`).
 
 MODEL V3 was not created because M2 failed the predeclared promotion
 threshold (net +3, McNemar p 0.8895, folds 3–4 net −9, bootstrap interval
@@ -197,10 +204,12 @@ promotion audit rejected an unstable +3-cell successor.
 
 ### B. Three-bullet technical project description
 
-- Built and froze a reference-only LightGBM personal model (MODEL V2) at
-  82.12% team-compatible five-fold fold-safe validation accuracy using a
-  provenance-audited Zenodo MERFISH reference with 136,574 usable cells
-  after competition-ID and exact-vector duplicate exclusion.
+- Built and froze External Reference Transfer (LightGBM) as personal MODEL V2
+  (`V2-B-REFONLY`) at 82.12% honest external-reference validation accuracy
+  on the locked team-compatible 5-fold partition, using a provenance-audited
+  Zenodo MERFISH reference with 136,574 usable cells after competition-ID
+  and exact-vector duplicate exclusion. LightGBM defaults are documented as
+  deriving from `team/main` `ext_refonly.py`.
 - Showed that a biologically distinct SNI source is a weak standalone
   classifier (56.82%) but contributes 53 unique recoveries, and that
   explicit 0.5/0.5 source-balanced training beats naive pooling without
@@ -212,8 +221,8 @@ promotion audit rejected an unstable +3-cell successor.
 ### C. 90-second interview explanation
 
 I worked on 60-class MERFISH cell-type annotation. My frozen personal model
-is a reference-only LightGBM, MODEL V2, at 82.12% on a locked 5-fold
-protocol. A teammate model, LZH Prior-H, is stronger as a standalone
+is External Reference Transfer (LightGBM), MODEL V2 (`V2-B-REFONLY`), at
+82.12% honest external-reference validation on a locked 5-fold partition. A teammate model, LZH Prior-H, is stronger as a standalone
 comparator at 82.66%; I did not build that model. The V3 program asked
 whether complementary experts could raise deployable accuracy. We found
 real extra information: privileged 500-gene signal on the same-study

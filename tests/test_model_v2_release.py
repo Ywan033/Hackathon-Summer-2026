@@ -71,7 +71,7 @@ def test_readme_and_version_doc_links():
     assert "Not submitted" in readme
     assert "Original Hackathon Information" not in readme
     assert readme.startswith("# WYH Modeling Track")
-    assert docs.startswith("# MODEL V2 — Reference-Augmented MERFISH Cell-Type Classification")
+    assert docs.startswith("# MODEL V2 — External Reference Transfer (LightGBM)")
     assert "ce06f62c0ec4973581dae17bb76f0cd9" in docs
     assert "0.8212" in docs
     assert "Not submitted" in docs

@@ -1,30 +1,37 @@
-# MODEL V2 — Reference-Augmented MERFISH Cell-Type Classification
+# MODEL V2 — External Reference Transfer (LightGBM)
 
-This document describes the frozen MODEL V2 release candidate. It is not an official captain-repository submission.
+Internal frozen identifier: **V2-B-REFONLY**. Preserve that string in artifacts, scripts, tests, and tags.
 
-## 1. Release status
+This document describes the frozen selected WYH personal model. It is not an official captain-repository submission.
+
+## 1. Status
 
 | Item | Value |
 |---|---|
-| Identity | Frozen MODEL V2 candidate |
-| Architecture | V2-B-REFONLY / C0: reference-only LightGBM |
+| Identity | Frozen selected WYH personal model |
+| Public name | External Reference Transfer (LightGBM) |
+| Internal frozen ID | V2-B-REFONLY / C0 |
 | External labels | Approved Zenodo MERFISH spinal-cord deposit (cleaned) |
-| Validation | Team-compatible 5-fold OOF |
-| Primary OOF accuracy | **0.8212** (4106 / 5000) |
+| Evaluation | Honest external-reference validation on the 5000 competition-train cells |
+| Evaluation partition | `experiments/team_folds_5_seed42.csv` |
+| Primary accuracy | **0.8212** (4106 / 5000 = 82.12%) |
 | Macro-F1 | 0.7936 |
-| Official hidden-test score | **Not submitted** |
-| Official leaderboard score | **Not submitted** |
+| Official hidden-test score | No verified official hidden-test score is attributable specifically to MODEL V2 in this personal repository |
+| Official leaderboard score | **Not submitted.** No verified official leaderboard score is attributable specifically to MODEL V2 in this personal repository |
 | Submission candidate | `outputs/submissions/model_v2_candidate.csv` |
+| Tag | `model-v2` |
 
-MODEL V2 is the selected reference-only architecture. It does not blend MODEL V1, V2-A, or V2-B probabilities. The recorded OOF accuracy is local validation on persisted 5-fold assignments. MODEL V2 has not been submitted for official scoring.
+MODEL V2 is the selected architecture. It does not blend MODEL V1, V2-A, or V2-B probabilities. LightGBM is fit **only on the 136,574 cleaned reference rows**. Competition training labels are **not** the boosting target. The recorded **0.8212** figure is honest external-reference validation on the 5000 competition-train cells under the documented team-compatible partition. It is **not** conventional competition-label OOF.
 
-The candidate has exactly 5000 test predictions in `meta_test.csv` order, uses the official columns `Cell_ID,MERFISH_cell_type_annotation.y`, and is produced only from `outputs/probabilities/V2-B-REFONLY_test_probabilities_seg.csv.gz`.
+No verified official leaderboard score is attributable specifically to MODEL V2 in this personal repository. Do not invent captain-submission provenance.
+
+The candidate file has exactly 5000 test predictions in `meta_test.csv` order, uses the official columns `Cell_ID,MERFISH_cell_type_annotation.y`, and is produced only from `outputs/probabilities/V2-B-REFONLY_test_probabilities_seg.csv.gz`.
 
 ## 2. Problem and motivation
 
 University of Rochester Biomedical Data Science Hackathon Summer 2026: 60-class MERFISH cell-type classification. Official metric: overall accuracy.
 
-MODEL V1 (hierarchical signature specialists) reached **0.7598** on the frozen personal 3-fold protocol (3799 / 5000). Remaining errors concentrated in the large metadata-missing / glial-non-neuronal regime: 2958 / 5000 training cells lack `(Region, E/I, Segment)`, and most V1 mistakes sit in that bucket. Closely related oligodendrocyte / OPC / astrocyte subtypes are the dominant confusions.
+MODEL V1 (Hierarchical Signature Specialists) reached **0.7598** on the frozen personal 3-fold competition-label OOF protocol (3799 / 5000). Remaining errors concentrated in the large metadata-missing / glial-non-neuronal regime: 2958 / 5000 training cells lack `(Region, E/I, Segment)`, and most V1 mistakes sit in that bucket. Closely related oligodendrocyte / OPC / astrocyte subtypes are the dominant confusions.
 
 MODEL V2 therefore added two families in order:
 
@@ -33,15 +40,15 @@ MODEL V2 therefore added two families in order:
 
 ## 3. Model evolution
 
-| Model | Method | Protocol | OOF accuracy | Decision |
+| Model | Method | Protocol | Accuracy | Decision |
 |---|---|---|---:|---|
-| MODEL V1 / YW-004 | Hierarchical signature specialists | personal 3-fold | 0.7598 | Frozen MODEL V1 |
-| BRIDGE-YW004-5F | Same V1 architecture on team 5-fold | team 5-fold | 0.7596 | Bridge, not a new version |
-| V2-A Spatial LightGBM + E/I | Competition-only spatial LightGBM | team 5-fold | 0.7690 | Accepted spatial family; not retuned |
-| **V2-B Reference-only** | **LightGBM fit on cleaned Zenodo reference** | **team 5-fold** | **0.8212** | **Selected MODEL V2** |
-| V2-C best fixed blend C1 | 0.25 V2-A + 0.75 V2-B | team 5-fold | 0.8224 | **Rejected** |
+| MODEL V1 / YW-004 | Hierarchical Signature Specialists | personal 3-fold competition-label OOF | 0.7598 | Frozen historical baseline |
+| BRIDGE-YW004-5F | Same V1 architecture on the team 5-fold partition | team 5-fold partition | 0.7596 | Bridge, not a new version |
+| V2-A Spatial LightGBM + E/I | Competition-only spatial LightGBM | team 5-fold partition | 0.7690 | Accepted spatial family; not retuned |
+| **V2-B-REFONLY** | **LightGBM fit on cleaned Zenodo reference** | **external-reference validation on the 5-fold partition** | **0.8212** | **Selected MODEL V2** |
+| V2-C best fixed blend C1 | 0.25 V2-A + 0.75 V2-B | team 5-fold partition | 0.8224 | **Rejected** |
 
-C1 was rejected despite a slightly higher aggregate OOF:
+C1 was rejected despite a slightly higher aggregate score:
 
 - net gain versus V2-B was only **+6 cells** (+0.12 pp);
 - fold behavior was MIXED: folds 0–2 improved, folds 3–4 **regressed** (−0.40 / −0.30 pp);
@@ -49,7 +56,7 @@ C1 was rejected despite a slightly higher aggregate OOF:
 - 88 predictions changed to harvest those 6 net cells;
 - the extra spatial-blend complexity is not justified by a robust, fold-stable gain.
 
-Equal three-expert averaging (C4) was worse than V2-B (0.8132). No other predeclared blend was eligible. A simpler reference-only architecture is therefore MODEL V2.
+Equal three-expert averaging (C4) was worse than V2-B (0.8132). No other predeclared blend was eligible. The simpler V2-B-REFONLY architecture is therefore MODEL V2.
 
 ## 4. External reference provenance
 
@@ -75,6 +82,16 @@ The raw `.h5ad` lives under `work/external/`, which is **gitignored**. It is not
 ## 5. MODEL V2 architecture
 
 MODEL V2 is V2-B-REFONLY: a single LightGBM multiclass model **fit only on the 136,574 usable reference rows**. Competition training labels are never the boosting target.
+
+### Underlying modeling-component provenance
+
+The LightGBM specification / defaults, extended-universe feature layout, and related reference-prep scripts are documented as deriving from the `team/main` `ext_refonly.py` family (`reports/V2-B-REFONLY_methodology.json`: `read_only_source` = `team/main via git show`; scripts `work/ext_refonly.py`, `work/prep_ext.py`, `work/common_ext.py`, `work/ext_post.py`, `work/build_reference_ids.py`).
+
+WYH does **not** claim to have originated that reference-LightGBM modeling idea or those defaults.
+
+WYH **does** own the personal MODEL V2 freeze: the honest fold-safe external-reference evaluation contract, leakage-control implementation, independent exclusion reproduction, artifacts, reproducibility, and the model-selection evidence that kept V2-B-REFONLY over the rejected C1 blend.
+
+### Features
 
 Features follow the same-team extended-universe layout on all 146,621 deposit cells (graphs need the full sections):
 
@@ -107,7 +124,7 @@ MODEL V2 does **not** use V2-A or BRIDGE probabilities, class-weight search, pse
 
 ## 6. Validation protocol
 
-All MODEL V2 numbers use the team-compatible 5-fold file `experiments/team_folds_5_seed42.csv`:
+All MODEL V2 numbers use the team-compatible 5-fold file `experiments/team_folds_5_seed42.csv` as the common **evaluation / robustness partition**:
 
 ```text
 StratifiedKFold(
@@ -124,11 +141,19 @@ When predicting competition fold *f*:
 - other training-fold labels may enter neighbor histograms only;
 - hidden test labels are never read.
 
-This is stricter than the same-team `ext_refonly.py` all-train-visible evaluation. OOF is slightly pessimistic relative to test-time histograms (all 5000 train labels visible).
+This is honest **external-reference validation** of a classifier fit on cleaned Zenodo rows, scored on the 5000 competition-train cells. It is **not** conventional competition-label OOF: competition labels are not the LightGBM fitting target.
+
+This contract is stricter than the same-team `ext_refonly.py` all-train-visible evaluation. The 0.8212 figure is slightly pessimistic relative to test-time histograms (all 5000 train labels visible in those histograms).
+
+The protocol-matched V1 architecture on the same 5-fold file is **BRIDGE-YW004-5F = 0.7596**. The directly protocol-matched improvement is:
+
+**0.8212 − 0.7596 = +0.0616 (+6.16 percentage points).**
+
+The descriptive **cross-protocol** difference between MODEL V1 3-fold OOF 0.7598 and MODEL V2 external-reference validation 0.8212 is **+0.0614 / +6.14 percentage points**. That +6.14 pp figure is not the protocol-matched improvement.
 
 ## 7. Final results
 
-**OOF = 82.12% = 4106 / 5000.** Macro-F1 = 0.7936.
+**External-reference validation accuracy = 82.12% = 4106 / 5000.** Macro-F1 = 0.7936.
 
 | Fold | Accuracy |
 |---|---:|
@@ -145,11 +170,15 @@ This is stricter than the same-team `ext_refonly.py` all-train-visible evaluatio
 | Neuron | 1858 | 0.9198 |
 | Glial / non-neuronal | 3142 | 0.7629 |
 
-Deltas: **+0.0614** vs MODEL V1 (0.7598); **+0.0616** vs BRIDGE (0.7596); **+0.0522** vs V2-A +E/I (0.7690).
+Deltas:
+
+- **+0.0616** vs BRIDGE-YW004-5F (0.7596) — **protocol-matched**
+- **+0.0522** vs V2-A +E/I (0.7690) — same 5-fold partition
+- +0.0614 / +6.14 pp vs MODEL V1 3-fold OOF (0.7598) — descriptive **cross-protocol** difference between 0.7598 and 0.8212; not the protocol-matched improvement
 
 ## 8. Error analysis
 
-Remaining errors are still concentrated among closely related glial subtypes. Top OOF confusion pairs:
+Remaining errors are still concentrated among closely related glial subtypes. Top confusion pairs on the 5000 competition-train evaluation cells:
 
 - `oligodendrocyte_1` → `oligodendrocyte_progenitor_2` (98)
 - `oligodendrocyte_progenitor_2` → `oligodendrocyte_1` (55)
@@ -161,15 +190,15 @@ Remaining errors are still concentrated among closely related glial subtypes. To
 
 No new specialists are introduced in MODEL V2.
 
-## 9. Expert complementarity / V3 motivation
+## 9. Expert complementarity (diagnostic only)
 
-The following is **diagnostic only**. It is not a deployable model score and was not used to select MODEL V2.
+The following is **diagnostic only**. It is not a deployable model score and was not used to select MODEL V2. Diagnostic oracle coverage is a retrospective coverage ceiling requiring ground-truth knowledge. It is not deployable accuracy.
 
 Three saved experts (BRIDGE, V2-A +E/I, V2-B) were compared by argmax:
 
 | Statistic | Count | Rate |
 |---|---:|---:|
-| Three-expert oracle (at least one expert correct) | 4414 / 5000 | **0.8828** |
+| Three-expert diagnostic oracle (at least one expert correct) | 4414 / 5000 | **0.8828** |
 | MODEL V2 / V2-B correct | 4106 / 5000 | 0.8212 |
 | Oracle headroom | 308 cells | — |
 | Only BRIDGE correct | 111 | — |
@@ -177,7 +206,7 @@ Three saved experts (BRIDGE, V2-A +E/I, V2-B) were compared by argmax:
 | Only V2-B correct | 241 | — |
 | All three wrong | 586 | — |
 
-Fixed convex blends (C0–C4 only; no weight search) did not convert that headroom into a stable OOF gain. This motivates **future cell-adaptive expert routing research for MODEL V3**. No V3 score is claimed.
+Fixed convex blends (C0–C4 only; no weight search) did not convert that headroom into a stable gain. That diagnostic later motivated the V3 research program. The V3 program completed; MODEL V3 was **not created**. No V3 score is claimed.
 
 ## 10. Leakage / overfitting controls
 
@@ -186,7 +215,7 @@ Fixed convex blends (C0–C4 only; no weight search) did not convert that headro
 - Frozen team 5-fold file; personal 3-fold `experiments/folds.csv` untouched.
 - No lucky-seed search; LightGBM seed 0; 700 fixed rounds.
 - V2-C evaluated only five predeclared blends; no grid, scipy, stacking, or post-hoc retuning.
-- C1 rejected despite a slightly higher aggregate OOF.
+- C1 rejected despite a slightly higher aggregate score.
 - MODEL V1 sources, tag, and candidate immutable.
 - Official data manifest verified.
 
@@ -195,13 +224,13 @@ Fixed convex blends (C0–C4 only; no weight search) did not convert that headro
 Place the approved deposit at `work/external/MERFISH_spinal_cord_resolved_0718.h5ad` and confirm MD5 `ce06f62c0ec4973581dae17bb76f0cd9`. Do not commit that file.
 
 ```bash
-# BRIDGE (YW-004 on team 5-fold)
+# BRIDGE (YW-004 on team 5-fold partition)
 .venv/bin/python scripts/07_bridge_yw004_5f.py
 
 # V2-A competition-only spatial LightGBM
 .venv/bin/python scripts/08_v2a_spatial_lgbm.py
 
-# V2-B reference-only LightGBM (requires local h5ad)
+# V2-B-REFONLY (requires local h5ad)
 .venv/bin/python scripts/09_v2b_refonly.py
 
 # V2-C fixed-blend evaluation (saved probabilities only; no retraining)
@@ -222,11 +251,13 @@ Place the approved deposit at `work/external/MERFISH_spinal_cord_resolved_0718.h
 | Registry | `experiments/registry_v2.csv` |
 | V2-B metrics / audits | `outputs/metrics/V2-B-REFONLY_*.json`, `reports/V2-B-REFONLY_methodology.json` |
 | V2-C scoreboard | `outputs/metrics/V2-C-scoreboard.json`, `outputs/metrics/V2-C-complementarity.json` |
-| OOF labels | `outputs/oof/V2-B-REFONLY_oof.csv` |
+| Competition-train evaluation labels | `outputs/oof/V2-B-REFONLY_oof.csv` (filename retains historical `oof` identifier) |
 | Selected test probabilities | `outputs/probabilities/V2-B-REFONLY_test_probabilities_seg.csv.gz` |
 | Candidate | `outputs/submissions/model_v2_candidate.csv` |
 | Release metrics | `outputs/metrics/model_v2_metrics.json` |
 
-## 13. Limitations / next step
+## 13. Limitations
 
-Reference-only LightGBM still confuses closely related glial subtypes. Static fixed blending of hierarchical, spatial, and reference experts did not provide a robust gain. The three-expert oracle (0.8828) is diagnostic headroom only; it suggests adaptive routing may be worth testing in MODEL V3. No future accuracy is claimed.
+External Reference Transfer (LightGBM) still confuses closely related glial subtypes. Static fixed blending of hierarchical, spatial, and reference experts did not provide a robust gain. The three-expert diagnostic oracle (0.8828) is coverage headroom only.
+
+The later V3 research program tested complementary-expert utilization, including source-diverse references, and did not promote a successor. MODEL V2 remains the frozen selected WYH personal model. No future accuracy is claimed. No verified official leaderboard score is attributable specifically to MODEL V2 in this personal repository.

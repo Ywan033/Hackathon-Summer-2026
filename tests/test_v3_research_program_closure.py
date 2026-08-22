@@ -3,6 +3,11 @@
 Does not train a model, blend experts, create MODEL V3, or modify
 prediction/prediction.csv. Verifies frozen closure invariants against
 committed reports and machine-readable artifacts.
+
+Model cards under docs/versions/ are archival documentation. They may
+receive factual final-state wording updates. They are not byte-for-byte
+immutable experiment artifacts. Numeric MODEL V1/V2/V3 outputs, fold
+files, and prediction/prediction.csv remain protected.
 """
 from __future__ import annotations
 
@@ -19,8 +24,39 @@ METRICS = OUT / "v3_research_program_metrics.csv"
 SUMMARY = ROOT / "reports" / "v3" / "v3_research_program_summary.md"
 CONTRIB = ROOT / "docs" / "contributions" / "wyh_v3_contribution.md"
 PRED = ROOT / "prediction" / "prediction.csv"
+MODEL_V1_DOC = ROOT / "docs" / "versions" / "model_v1.md"
+MODEL_V2_DOC = ROOT / "docs" / "versions" / "model_v2.md"
 MODEL_V3_DOC = ROOT / "docs" / "versions" / "model_v3.md"
 MODEL_V2_METRICS = ROOT / "outputs" / "metrics" / "model_v2_metrics.json"
+
+# Byte-immutable experiment / release artifacts. Model cards are excluded
+# on purpose: they are archival documentation, not frozen outputs.
+FROZEN_EXPERIMENT_ARTIFACTS = (
+    "prediction/prediction.csv",
+    "experiments/folds.csv",
+    "experiments/team_folds_5_seed42.csv",
+    "outputs/submissions/model_v1.csv",
+    "outputs/submissions/model_v2_candidate.csv",
+    "outputs/metrics/model_v1_metrics.json",
+    "outputs/metrics/model_v2_metrics.json",
+    "outputs/oof/MODEL-V2_oof.csv",
+    "outputs/oof/V2-B-REFONLY_oof.csv",
+    "outputs/v3/v3_e00t_metrics.json",
+    "outputs/v3/v3_e02d_student_comparison.csv",
+    "outputs/v3/v3_e03a_rescue_metrics.json",
+    "outputs/v3/v3_e04s_complementarity.json",
+    "outputs/v3/v3_e05a_directional_metrics.json",
+    "outputs/v3/v3_e06m_metrics.json",
+    "outputs/v3/v3_e06m_complementarity.json",
+    "outputs/v3/v3_e07d_decision.json",
+    "reports/v3/v3_e00t_team_expert_audit.md",
+    "reports/v3/v3_e02d_privileged_gene_distillation.md",
+    "reports/v3/v3_e03a_rescue_audit.md",
+    "reports/v3/v3_e04s_sni_source_expert.md",
+    "reports/v3/v3_e05a_directional_complementarity_audit.md",
+    "reports/v3/v3_e06m_source_balanced_multireference.md",
+    "reports/v3/v3_e07d_final_deployable_decision_audit.md",
+)
 E00T = OUT / "v3_e00t_metrics.json"
 E07D = OUT / "v3_e07d_decision.json"
 E06M_COMP = OUT / "v3_e06m_complementarity.json"
@@ -174,29 +210,27 @@ def test_prediction_csv_unchanged():
 
 
 def test_frozen_experiment_artifacts_unchanged_by_closure():
-    frozen = _git(
-        "diff",
-        "--",
-        "docs/versions/model_v1.md",
-        "docs/versions/model_v2.md",
-        "outputs/metrics/model_v2_metrics.json",
-        "outputs/oof/MODEL-V2_oof.csv",
-        "outputs/v3/v3_e00t_metrics.json",
-        "outputs/v3/v3_e02d_student_comparison.csv",
-        "outputs/v3/v3_e03a_rescue_metrics.json",
-        "outputs/v3/v3_e04s_complementarity.json",
-        "outputs/v3/v3_e05a_directional_metrics.json",
-        "outputs/v3/v3_e06m_metrics.json",
-        "outputs/v3/v3_e06m_complementarity.json",
-        "outputs/v3/v3_e07d_decision.json",
-        "reports/v3/v3_e00t_team_expert_audit.md",
-        "reports/v3/v3_e02d_privileged_gene_distillation.md",
-        "reports/v3/v3_e03a_rescue_audit.md",
-        "reports/v3/v3_e04s_sni_source_expert.md",
-        "reports/v3/v3_e05a_directional_complementarity_audit.md",
-        "reports/v3/v3_e06m_source_balanced_multireference.md",
-        "reports/v3/v3_e07d_final_deployable_decision_audit.md",
-    )
-    assert frozen == ""
+    frozen = _git("diff", "--", *FROZEN_EXPERIMENT_ARTIFACTS)
+    assert frozen == "", frozen
+    for rel in FROZEN_EXPERIMENT_ARTIFACTS:
+        assert (ROOT / rel).is_file(), rel
+    # Archival model cards are not in FROZEN_EXPERIMENT_ARTIFACTS.
+    assert "docs/versions/model_v1.md" not in FROZEN_EXPERIMENT_ARTIFACTS
+    assert "docs/versions/model_v2.md" not in FROZEN_EXPERIMENT_ARTIFACTS
     branch = _git("branch", "--show-current").strip()
     assert branch == "ywan/ml-pipeline"
+
+
+def test_model_cards_preserve_canonical_identities():
+    v1 = MODEL_V1_DOC.read_text()
+    v2 = MODEL_V2_DOC.read_text()
+    assert "3799 / 5000" in v1
+    assert re.search(r"\b0\.7598\b", v1)
+    assert "4106 / 5000" in v2
+    assert re.search(r"\b0\.8212\b", v2)
+    assert "V2-B-REFONLY" in v2
+    assert re.search(r"Internal frozen identifier:\s*\*\*V2-B-REFONLY\*\*", v2)
+    assert not MODEL_V3_DOC.is_file()
+    assert re.search(r"MODEL V3 was \*\*not created\*\*", v2)
+    tags = _git("tag", "--list", "model-v3").strip()
+    assert tags == ""

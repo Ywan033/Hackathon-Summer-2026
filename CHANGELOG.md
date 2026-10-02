@@ -9,8 +9,11 @@ GitHub Releases list.
 - `5fb1b67` — Phase A repository finalization audit
 - `3f7ace3` — Phase B: two frozen validation protocols, MODEL V2 public name,
   provenance, and attribution map
-- Public presentation layer — final README, documentation index, final project
-  report, reproducibility guide, and experiment/output indexes.
+- `89f9ef2` — final README, documentation index, final project report,
+  reproducibility guide, and experiment/output indexes
+- Phase D1 clean-clone archive verification at `89f9ef2`: official-data and
+  candidate contracts passed, 59 tests passed, 74 relative links passed, and
+  the tracked tree remained clean. Full model retraining was not performed.
 
 ## 2026-08-21 — V3 research closure
 

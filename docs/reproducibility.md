@@ -1,7 +1,30 @@
 # Reproducibility
 
-This guide records commands that exist in the repository. Clean-clone full
-reproduction has not yet been verified for the current archive state.
+This guide records commands that exist in the repository.
+
+Clean-clone archive integrity verification passed for commit 89f9ef2. Full
+from-scratch model retraining is tracked separately and had not yet been
+performed at this verification stage.
+
+Evidence:
+[`../reports/finalization/phase_d1_clean_clone_verification.md`](../reports/finalization/phase_d1_clean_clone_verification.md).
+
+**Verified** (D1; isolated disposable clone; Python 3.9.6):
+
+- isolated clean clone at HEAD `89f9ef2`
+- fresh Python 3.9.6 environment
+- dependency installation from `requirements.txt`
+- official manifest and data-contract validation
+- MODEL V1 and MODEL V2 candidate validation
+- the relevant test suite
+- relative Markdown link validation
+- tracked-tree cleanliness after those checks
+
+**Not yet verified** (D2 / D3 have not been performed):
+
+- full MODEL V1 retraining from scratch
+- full MODEL V2 retraining from scratch
+- bit-for-bit regeneration of MODEL V2 probability artifacts
 
 Pinned environment: **Python 3.9.x** and `requirements.txt`.
 
@@ -27,7 +50,9 @@ Do not copy another machine’s `.venv`.
 ## Quick integrity check
 
 Does **not** retrain models. Uses the official CSVs in `data/` (tracked in
-Git).
+Git). These commands were verified on an isolated clean clone at commit
+`89f9ef2` (D1). That result is archive integrity, not from-scratch
+retraining.
 
 ```sh
 python3 -m venv .venv
@@ -65,8 +90,9 @@ Inspecting committed artifacts under `outputs/` does not require retraining.
 ## Full model reproduction
 
 The commands below are source-supported entry points. They are **not** a
-verified clean-clone procedure. Several of them write under `outputs/` and,
-for some scripts, `experiments/`.
+verified from-scratch retraining procedure. D1 verified clean-clone archive
+integrity only; D2 / D3 have not been performed. Several of these scripts
+write under `outputs/` and, for some scripts, `experiments/`.
 
 ### Official data
 
@@ -109,10 +135,16 @@ Requires the approved external reference **locally**:
 ```text
 work/external/MERFISH_spinal_cord_resolved_0718.h5ad
 MD5  ce06f62c0ec4973581dae17bb76f0cd9
-Zenodo record  18039571
+Zenodo record  18039571 (https://zenodo.org/records/18039571)
 ```
 
-The file is gitignored. Place it locally before any reference reproduction.
+The file is gitignored. Create the local-only directory, download the named
+file from the linked Zenodo record, and place it at the exact path above
+before any reference reproduction:
+
+```sh
+mkdir -p work/external
+```
 
 Checksum without rewriting frozen artifacts:
 
@@ -213,11 +245,13 @@ V3 candidates are experimental; they are not a formal MODEL version.
 
 ---
 
-## Reserved for clean-clone verification
+## Reserved for from-scratch retraining verification
 
-Not claimed here:
+D1 verified clean-clone archive integrity. It did not verify full model
+retraining. Still not claimed here:
 
-- a working one-command or disposable-clone command sequence;
+- full MODEL V1 retraining from scratch;
+- full MODEL V2 retraining from scratch;
 - bit-for-bit agreement of a fresh `scripts/09_v2b_refonly.py` rerun with
   committed 0.8212 artifacts;
 - runtime behavior of `07` / `08` / `09` when the registry row already

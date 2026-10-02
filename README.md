@@ -7,6 +7,11 @@ controlled model selection, and V3 research. MODEL V2 is the selected
 personal model. Team integration and official submission provenance are
 separate.
 
+Canonical archive branch:
+[`ywan/ml-pipeline`](https://github.com/Ywan033/Hackathon-Summer-2026/tree/ywan%2Fml-pipeline).
+The personal repository's default `main` branch retains the upstream organizer
+state, so use this branch link for the WYH project presentation.
+
 ## Results Summary
 
 | Stage | Method | Evaluation | Result | Decision |
@@ -107,6 +112,8 @@ python3 -m venv .venv
 
 Full MODEL V1 / MODEL V2 retraining, external-reference placement, and
 checksum steps are documented in [`docs/reproducibility.md`](docs/reproducibility.md).
+Clean-clone archive integrity was verified at commit `89f9ef2`; see the
+[`Phase D1 report`](reports/finalization/phase_d1_clean_clone_verification.md).
 
 ## Repository Structure
 

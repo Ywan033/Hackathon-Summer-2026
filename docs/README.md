@@ -53,3 +53,4 @@ deployable accuracy.
 - [`reports/finalization/repository_finalization_audit.md`](../reports/finalization/repository_finalization_audit.md) — Phase A
 - [`reports/finalization/phase_b_consistency_review.md`](../reports/finalization/phase_b_consistency_review.md) — Phase B
 - [`reports/finalization/phase_c_public_presentation_review.md`](../reports/finalization/phase_c_public_presentation_review.md) — Phase C
+- [`reports/finalization/phase_d1_clean_clone_verification.md`](../reports/finalization/phase_d1_clean_clone_verification.md) — Phase D1 clean-clone archive-integrity verification

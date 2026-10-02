@@ -54,7 +54,7 @@ Do not commit replacements of these four files.
 
 | Item | Repository evidence |
 |---|---|
-| Record | Zenodo **18039571** |
+| Record | [Zenodo **18039571**](https://zenodo.org/records/18039571) |
 | File | `MERFISH_spinal_cord_resolved_0718.h5ad` |
 | Expected local path | `work/external/MERFISH_spinal_cord_resolved_0718.h5ad` |
 | MD5 | `ce06f62c0ec4973581dae17bb76f0cd9` |
@@ -68,7 +68,9 @@ deposit. This file is not redistributed from this Git repository.
 
 ## Local storage policy
 
-Place the file locally and verify MD5 **before** any reference reproduction.
+Create `work/external/`, place the file locally, and verify MD5 **before** any
+reference reproduction. The directory is intentionally absent from a clean
+clone because it is gitignored.
 Never commit:
 
 - `*.h5ad`
@@ -122,6 +124,7 @@ Evidence: `reports/v3/v3_e04s_sni_source_expert.md`,
 
 | Item | Evidence |
 |---|---|
+| Record | [Zenodo **18039571**](https://zenodo.org/records/18039571) |
 | Local path | `work/external/SNI_merged_0917.h5ad` |
 | Tracked in Git? | **No** (`work/external/` gitignored) |
 | MD5 | `7e90a801ee57b8fec06cd03c8630f01b` |
@@ -140,7 +143,8 @@ cleaned MERFISH reference (excluded). Condition field in the file:
 
 E04S explicitly did not infer undocumented biological meaning from field
 names and did not claim a public license. This provenance note follows that
-restriction. Remote origin beyond the local filename is not asserted.
+restriction. The Zenodo record page lists both external filenames and their
+matching MD5 values; no additional license interpretation is asserted here.
 
 ## 3.2 Same Zenodo file in V3 privileged-gene work
 

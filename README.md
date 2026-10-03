@@ -1,4 +1,4 @@
-# MERFISH Cell-Type Annotation — WYH Modeling Contribution
+# MERFISH Cell-Type Annotation — WYH branch
 
 This repository documents the WYH modeling contribution to 60-class MERFISH
 cell-type annotation over a 200-gene panel. The work includes reproducible

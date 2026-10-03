@@ -4,6 +4,17 @@ Verified history of the WYH modeling line, developed on `ywan/ml-pipeline`
 in `Ywan033/Hackathon-Summer-2026`. Dates are commit dates. This is not a
 GitHub Releases list.
 
+## 2026-10-02 — Personal public archive integration
+
+- Preserved `ywan/ml-pipeline` as the frozen personal source branch.
+- Added the exact 210-file `team/wyh@f4ba901` `work/` snapshot under
+  `team_archive/wyh/work/`, with per-file hashes and provenance.
+- Added a 49-file personal prediction artifact manifest covering formal
+  MODEL V1 / MODEL V2 outputs, retained baselines, and actual V3 research
+  predictions.
+- Prepared personal `main` as the public landing branch without changing
+  frozen predictions, folds, metrics, official data, or team repositories.
+
 ## 2026-08-22 — Protocol, provenance, and public presentation
 
 - `5fb1b67` — Phase A repository finalization audit

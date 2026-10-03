@@ -50,8 +50,22 @@ This branch is the source of truth for:
 - documentation
 - version tags `model-v1` and `model-v2`
 
-Do not merge archival documentation into personal `main` as a substitute for
-this branch. Personal `main` should remain relatively close to upstream.
+## Personal public integration branch
+
+Branch: `main`
+
+By explicit archival authorization on 2026-10-02, personal `main` is the
+public landing branch integrating:
+
+- the frozen personal archive from `ywan/ml-pipeline`;
+- the provenance-locked `team/wyh` `work/` snapshot under
+  `team_archive/wyh/work/`; and
+- the personal prediction artifact index under `prediction_versions/`.
+
+`main` is not a replacement modeling-development branch.
+`ywan/ml-pipeline` remains the frozen personal source of truth. Do not flatten
+the team snapshot into the personal root, rewrite its attribution, or use the
+integration branch to reopen modeling.
 
 ## Team collaboration / delivery repository
 

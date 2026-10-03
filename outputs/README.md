@@ -83,3 +83,7 @@ repository.
 `outputs/v3/` holds per-stage metrics, complementarity tables, and the
 closure package. Treat M2 scores as experimental. Treat oracle fields as
 diagnostic. See [`reports/v3/v3_research_program_summary.md`](../reports/v3/v3_research_program_summary.md).
+
+Complete prediction-artifact paths, dataset scope, shapes, SHA-256 values,
+source commits, and metric applicability are indexed in
+[`prediction_versions/`](../prediction_versions/README.md).

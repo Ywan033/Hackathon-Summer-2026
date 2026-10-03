@@ -218,7 +218,9 @@ def test_frozen_experiment_artifacts_unchanged_by_closure():
     assert "docs/versions/model_v1.md" not in FROZEN_EXPERIMENT_ARTIFACTS
     assert "docs/versions/model_v2.md" not in FROZEN_EXPERIMENT_ARTIFACTS
     branch = _git("branch", "--show-current").strip()
-    assert branch == "ywan/ml-pipeline"
+    assert branch in {"ywan/ml-pipeline", "main"} or branch.startswith(
+        "integration/personal-main-archive-"
+    )
 
 
 def test_model_cards_preserve_canonical_identities():

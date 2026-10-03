@@ -11,6 +11,8 @@ Developer operating rules (not a public landing page): [`AGENTS.md`](../AGENTS.m
 - [`README.md`](../README.md) — public landing page (WYH section above the organizer text)
 - [`final_project_report.md`](final_project_report.md) — archival research report
 - [`CHANGELOG.md`](../CHANGELOG.md) — verified milestone history
+- [`prediction_versions/README.md`](../prediction_versions/README.md) — personal validation/test prediction artifact index
+- [`team_archive/wyh/PROVENANCE.md`](../team_archive/wyh/PROVENANCE.md) — imported team `wyh` `work/` snapshot scope and checksums
 
 ## Model versions
 

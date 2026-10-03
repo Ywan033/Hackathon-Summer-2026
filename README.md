@@ -7,10 +7,10 @@ controlled model selection, and V3 research. MODEL V2 is the selected
 personal model. Team integration and official submission provenance are
 separate.
 
-Canonical archive branch:
+The public `main` branch integrates the personal archive, a provenance-locked
+snapshot of the team `wyh` branch's `work/` tree, and an index of personal
+prediction artifacts. The frozen personal development source remains:
 [`ywan/ml-pipeline`](https://github.com/Ywan033/Hackathon-Summer-2026/tree/ywan%2Fml-pipeline).
-The personal repository's default `main` branch retains the upstream organizer
-state, so use this branch link for the WYH project presentation.
 
 ## Results Summary
 
@@ -38,6 +38,31 @@ the protocol-matched gain.
 
 No verified official leaderboard score is attributed specifically to MODEL V1
 or MODEL V2 in this personal repository.
+
+## Integrated Archive
+
+- **Personal source of truth:** frozen MODEL V1, MODEL V2, V3 research,
+  validation contracts, reports, and artifacts inherited from
+  `ywan/ml-pipeline` at
+  `e3b5f323c5ab0de9aa1cf1e8f65dd530db79059b`.
+- **Team delivery snapshot:**
+  [`team_archive/wyh/work/`](team_archive/wyh/work/) is the exact tracked
+  `work/` tree from `X0X0X00/Hackathon-Summer-2026`
+  `wyh@f4ba901105adea195f5474132cf793688f14e2fa`. Scope, exclusions,
+  checksums, attribution, and execution caveats are in
+  [`team_archive/wyh/PROVENANCE.md`](team_archive/wyh/PROVENANCE.md).
+  It is a snapshot of that branch, not every team branch or the complete
+  final team solution.
+- **Prediction versions:**
+  [`prediction_versions/README.md`](prediction_versions/README.md) separates
+  formal personal candidates, labeled validation/OOF artifacts, hidden-label
+  test inference, V3 experiments, and non-personal files. The machine-readable
+  [`manifest.csv`](prediction_versions/manifest.csv) records rows, output
+  types, SHA-256, source commits, and metric evidence.
+- **Organizer material:** the original challenge description remains below
+  the separator in this README and in
+  [`Data.Description.md`](Data.Description.md). It is retained for
+  traceability.
 
 ## MODEL V2 — Selected Personal Model
 
@@ -114,6 +139,10 @@ Full MODEL V1 / MODEL V2 retraining, external-reference placement, and
 checksum steps are documented in [`docs/reproducibility.md`](docs/reproducibility.md).
 Clean-clone archive integrity was verified at commit `89f9ef2`; see the
 [`Phase D1 report`](reports/finalization/phase_d1_clean_clone_verification.md).
+That historical integrity check was not a full from-scratch model
+reproduction. The relocated team snapshot has separate path and external-data
+requirements; copying it successfully does not establish that it runs from
+its archive location.
 
 ## Repository Structure
 
@@ -127,6 +156,8 @@ Clean-clone archive integrity was verified at commit `89f9ef2`; see the
 | [`docs/`](docs/) | Model cards, provenance, contribution records, documentation index |
 | [`tests/`](tests/) | Data-contract, freeze, and V3-closure tests |
 | [`data/`](data/) | Organizer-provided official challenge CSVs |
+| [`prediction_versions/`](prediction_versions/) | Verified index of personal validation and test prediction artifacts |
+| [`team_archive/wyh/`](team_archive/wyh/) | Provenance-locked team `wyh` `work/` snapshot; not the personal source tree |
 | [`prediction/prediction.csv`](prediction/prediction.csv) | Organizer example submission; **not** a WYH model |
 
 Documentation index: [`docs/README.md`](docs/README.md).
@@ -139,6 +170,8 @@ data-contract infrastructure, MODEL V1, the MODEL V2 personal freeze, V3
 research and analysis, leakage controls, and model-selection evidence.
 
 Full attribution record: [`docs/contributions/wyh_contribution_summary.md`](docs/contributions/wyh_contribution_summary.md).
+Files in the team snapshot retain upstream history and must not be interpreted
+as proof that WYH authored every visible method or file.
 
 ## Limitations
 
@@ -147,7 +180,9 @@ when Region / E/I / Segment metadata are missing. MODEL V2 depends on a
 matched same-study external reference and can be sensitive to domain shift.
 V3 gains were too small and insufficiently stable to justify a new version.
 Internal validation scores on the 5000 competition-train cells are distinct
-from an official hidden-test or leaderboard score.
+from an official hidden-test or leaderboard score. Full MODEL V1 / MODEL V2
+retraining and bit-for-bit MODEL V2 probability regeneration remain
+unverified, and external `.h5ad` inputs must be obtained separately.
 
 ---
 
